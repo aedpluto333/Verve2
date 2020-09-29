@@ -2,9 +2,86 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Verve</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" media="screen"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.14/p5.js"></script>
 </head>
+
 <body>
 
+<!-- banner -->
+<!-- Next and logout buttons require further actions -->
+<div class="banner">
+    <div class="buttonPlacement">
+        <button type="button" onclick='window.location.href="user.html"'>Profile</button>
+        <button type="button" onclick='window.location.href="courses.html"'>Courses</button>
+        <button type="button" onclick='window.location.href="sitemap.html"'>Sitemap</button>
+        <button type="button">Next</button>
+        <button type="button" onclick='window.location.href="login.html"' class="logoutButton">Log out</button>
+    </div>
+</div>
+
+<!-- main page -->
+<!-- canvas: width="600" height="450" -->
+<div class="mainPanel">
+    <br>
+    <h1 class="mainContent" id="gameTitle">Lesson title</h1>
+    <br>
+    <div class="mainContent" id="lessonPanel"></div>
+    <br>
+    <p class="mainContent" id="gameDescription">Hello world!</p>
+    <br>
+</div>
+
+<!-- quiz -->
+<div class="mainPanel">
+    <br>
+    <h2 class="mainContent">Quiz</h1>
+        <p class="mainContent"> What is 2+2?</p>
+
+        <form class="mainContent">
+            <input type="radio" id="option1" name="quiz" value="1">
+            <label for="male">1</label><br>
+
+            <input type="radio" id="option2" name="quiz" value="2">
+            <label for="female">2</label><br>
+
+            <input type="radio" id="option3" name="quiz" value="3">
+            <label for="male">3</label><br>
+
+            <input type="radio" id="option4" name="quiz" value="4">
+            <label for="female">4</label><br><br>
+
+            <input class="quizSubmitButton" type="submit" value="Submit"><br><br>
+        </form>
+</div>
+
+<!-- relation to uni / extra topics -->
+<div class="mainPanel">
+    <br>
+    <h2 class="mainContent">Extra info</h2>
+    <p class="mainContent">This relates to many things you see in real life.</p>
+    <br>
+</div>
+
+<!-- notes -->
+<div class="">
+</div>
+
+<!-- comments -->
+<div class="mainPanel">
+    <br>
+    <h2 class="mainContent">Comments</h2>
+    <div class="comment">
+        <p>Blah blah blah ...</p>
+        <p style="text-align:right; font-weight: bold">aedpluto</p>
+    </div>
+</div>
+
+<script src="C:\Users\amyed\Documents\Computing\Computing project\Mock up\Simulations\Quantum Mechanics\random-walk.js">
+</script>
+<!--
+<input type="text" style="position:absolute;left:100px;top:600px;width:50px" id="input1"></input>
+-->
 </body>
 </html>
