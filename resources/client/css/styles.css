@@ -1,0 +1,69 @@
+/* styles for every page */
+
+body {
+    background-color:#EEEEEE;
+    margin: 0;
+    padding: 0;
+}
+
+.mainPanel {
+    width: 62.5vw;
+    margin: 0 auto;
+    background: white;
+    color: black;
+}
+
+.banner {
+    padding:1em;
+    background: #02b302;
+    color:white;
+}
+
+button {
+    background: #d2f7ea;
+    color: black;
+    height: 30px;
+    border: none;
+}
+
+.buttonPlacement {
+    width: 62.5vw;
+    margin: 0 auto;
+}
+
+.logoutButton {
+    float: right;
+}
+
+.mainContent, .lessonInfoBlock, .comment {
+    width: 46.875vw;
+    padding: 0vh 7.8125vw;
+    margin: 0 auto;
+}
+
+h1,h2,p,li,label,button {
+    font-family: Corbel, Verdana, Calibri;
+}
+
+/* styles for the lesson page */
+
+
+/* styles for the login page */
+.loginButton, .quizSubmitButton {
+    background: #02b302;
+    color: white;
+}
+
+/* syles for the user homepage */
+
+
+/* styles for the courses page */
+.lessonInfoBlock {
+    background: #d2f7ea;
+    width: 50%;
+}
+
+/* styles for the results page */
+
+
+/* styles for the sitemap */
