@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User homepage</title>
+    <link rel="stylesheet" type="text/css" href="css\styles.css" media="screen"/>
+</head>
+
+<body>
+
+<!-- banner -->
+<div class="banner">
+    <div class="buttonPlacement">
+        <button type="button" onclick='window.location.href="user.html"'>Profile</button>
+        <button type="button" onclick='window.location.href="courses.html"'>Courses</button>
+        <button type="button" onclick='window.location.href="sitemap.html"'>Sitemap</button>
+        <button type="button" onclick='window.location.href="login.html"' class="logoutButton">Log out</button>
+    </div>
+</div>
+
+<!-- main page -->
+<div class="mainPanel">
+    <br>
+    <h1 class="mainContent" id="gameTitle">Welcome back!</h1>
+    <img class="mainContent">
+    <p class="mainContent">You might be interested in this</p>
+    <br><br>
+
+    <!-- dynamically add more or fewer of these -->
+    <div class="mainContent">
+        <progress id="astronomy" max="100" value="10"> 10% </progress><br>
+        <label for="astronomy">10% through Astronomy</label><br><br>
+    </div>
+
+    <div class="mainContent">
+        <progress id="logic" max="100" value="50"> 50% </progress><br>
+        <label for="logic">50% through Logic</label><br><br>
+    </div>
+
+    <div class="mainContent">
+        <progress id="mechanics" max="100" value="86"> 86% </progress><br>
+        <label for="mechanics">86% through Newtonian Mechanics</label><br><br>
+    </div>
+
+    <div class="mainContent">
+        <progress id="quantum" max="100" value="75"> 75% </progress><br>
+        <label for="quantum">75% through Quantum Mechanics</label><br><br>
+    </div>
+
+    <div class="mainContent">
+        <progress id="relativity" max="100" value="43"> 43% </progress><br>
+        <label for="relativity">43% through Special Relativity</label>
+    </div>
+
+    <br>
+
+</div>
+</body>
+</html>
