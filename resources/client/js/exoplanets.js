@@ -17,6 +17,7 @@ var s = [window.innerWidth*0.46875/2,
     window.innerWidth*0.46875/4];
 var count = 0;
 var graphHeight = 0;
+var behindStar = false;
 
 function draw() {
     background(0);
@@ -28,6 +29,10 @@ function draw() {
 
     // draw planet
     fill(100);
+    if (behindStar) {
+        fill(255, 255, 0);
+    }
+    document.getElementById("gameTitle").innerHTML = count;
     ellipse(p[0], p[1], p[2], p[2]);
     count += 0.01;
     p[0] = width/2 + Math.sin(count)*200;
@@ -36,6 +41,18 @@ function draw() {
     var rightOfStar = s[0]+s[2]*0.5;
     var leftOfStar = s[0]-s[2]*0.5;
 
+    // if the angle is between +- pi/2 radians the planet should be in front of the star
+    // otherwise it should be behind it
+    // tau is 6.28
+    if (count >= 6.28) {
+        count=0;
+    } else if (count.toFixed(2) == 1.57) {
+        behindStar = !behindStar;
+    } else if (count.toFixed(2) == 4.71) {
+        behindStar = !behindStar;
+    }
+
+    /*
     if ((rightOfStar > p[0]) && (leftOfStar < p[0])) {
         if (p[0] > rightOfStar-s[2]*0.1) {
             graphHeight += height*0.05/(rightOfStar-s[2]*0.1);
@@ -49,6 +66,8 @@ function draw() {
         graphHeight = 0;
         stroke(255);
     }
+
+     */
 
     point(p[0], height*0.8+graphHeight);
     stroke(255);
