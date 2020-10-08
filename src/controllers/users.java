@@ -2,6 +2,7 @@ package controllers;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import server.main;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -23,7 +24,7 @@ public class users {
         System.out.println("Invoked Users.UsersList()");
         JSONArray response = new JSONArray();
         try {
-            PreparedStatement ps = Main.db.prepareStatement("SELECT UserID, UserName FROM Users");
+            PreparedStatement ps = main.db.prepareStatement("SELECT UserID, UserName FROM Users");
             ResultSet results = ps.executeQuery();
             while (results.next()==true) {
                 JSONObject row = new JSONObject();
