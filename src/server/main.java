@@ -25,7 +25,7 @@ public class main {
         ResourceConfig config = new ResourceConfig();       // prepare our Jersey Servlet, 'Servlet' is a Java program that runs on a Java-enabled web servers.
         // Jersey is our Servlet Library, Jetty is our Server Library
 
-        config.packages("server/controllers");                     // part of the server that provides API, listening and responding to HTTP requests
+        config.packages("controllers");                     // part of the server that provides API, listening and responding to HTTP requests
         config.register(MultiPartFeature.class);            // support multipart HTML forms
         ServletHolder servlet = new ServletHolder(new ServletContainer(config));  //Instantiate the Servlet
 
