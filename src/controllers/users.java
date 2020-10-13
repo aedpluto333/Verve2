@@ -1,5 +1,6 @@
 package controllers;
 
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.main;
@@ -33,7 +34,7 @@ public class users {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String UserLoggedIn(@PathParam("UserID") Integer UserID) {
-        System.out.println("Invoked Users.GetUser() with UserID " + UserID);
+        System.out.println("Invoked Users.LoggedIn() with UserID " + UserID);
         try {
             PreparedStatement ps = main.db.prepareStatement("SELECT SessionToken FROM Users WHERE UserID = ?");
             ps.setInt(1, UserID);
@@ -53,12 +54,12 @@ public class users {
         }
     }
 
-    @GET
-    @Path("attemptlogin/u={Username}p={Password}")
+    @POST
+    @Path("attemptlogin")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String UserAttemptLogin(@PathParam("Username") String Username, @PathParam("Password") String Password) {
-        System.out.println("Invoked Users.GetUser() with Username,Password " + Username + ", " + Password);
+    public String UserAttemptLogin(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password) {
+        System.out.println("Invoked Users.AttemptLogin()");
         try {
             PreparedStatement ps = main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
             ps.setString(1, Username);
@@ -70,12 +71,13 @@ public class users {
                 digest = MessageDigest.getInstance("SHA-256");
                 final byte[] hashbytes = digest.digest(Password.getBytes(StandardCharsets.UTF_8));
                 String sha2Hex = bytesToHex(hashbytes);
+                //System.out.println(sha2Hex);
 
                 // See if password guess equals the password
                 if (results.getString(1) == sha2Hex) {
-                    response.put("SessionToken", true);
+                    response.put("Success", true);
                 } else {
-                    response.put("SessionToken", false);
+                    response.put("Success", false);
                 }
             }
             return response.toString();
