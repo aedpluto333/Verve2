@@ -19,12 +19,12 @@ public class users {
     public String UserLoggedIn(@PathParam("UserID") Integer UserID) {
         System.out.println("Invoked Users.GetUser() with UserID " + UserID);
         try {
-            PreparedStatement ps = main.db.prepareStatement("SELECT UserName, Token FROM Users WHERE UserID = ?");
+            PreparedStatement ps = main.db.prepareStatement("SELECT Token FROM Users WHERE UserID = ?");
             ps.setInt(1, UserID);
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
             if (results.next()== true) {
-                response.put("SessiomToken", results.getInt(2));
+                response.put("SessionToken", results.getInt(2));
             }
             return response.toString();
         } catch (Exception exception) {
