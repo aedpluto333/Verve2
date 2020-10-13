@@ -13,7 +13,7 @@ import java.sql.ResultSet;
 
 public class users {
 
-    @Path("userloggedin/{UserID}")
+    @Path("loggedin/{UserID}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String UserLoggedIn(@PathParam("UserID") Integer UserID) {
