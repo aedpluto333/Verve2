@@ -24,7 +24,7 @@ public class users {
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
             if (results.next()== true) {
-                if (results.getInt(2) != "") {
+                if (results.getInt(2) != null) {
                     response.put("SessionToken", true);
                 } else {
                     response.put("SessionToken", false);
