@@ -13,18 +13,19 @@ import java.sql.ResultSet;
 
 public class users {
 
+    @GET
     @Path("loggedin/{UserID}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String UserLoggedIn(@PathParam("UserID") Integer UserID) {
         System.out.println("Invoked Users.GetUser() with UserID " + UserID);
         try {
-            PreparedStatement ps = main.db.prepareStatement("SELECT Token FROM Users WHERE UserID = ?");
+            PreparedStatement ps = main.db.prepareStatement("SELECT SessionToken FROM Users WHERE UserID = ?");
             ps.setInt(1, UserID);
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
             if (results.next()== true) {
-                if (results.getInt(2) != null) {
+                if (results.getString(1) != "") {
                     response.put("SessionToken", true);
                 } else {
                     response.put("SessionToken", false);
