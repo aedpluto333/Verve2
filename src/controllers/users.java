@@ -101,4 +101,36 @@ public class users {
             return "{\"Error\": \"Unable to get item, please see server console for more info.\"}";
         }
     }
+
+    @GET
+    @Path("listprogress/{UserID}")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String UserListProgress(@PathParam("UserID") Integer UserID) {
+        System.out.println("Invoked Users.listprogress() with UserID " + UserID);
+        try {
+            // look at the progresses link table and count the number of lessons completed for each course
+            // actually this should use the session token instead of the user id
+            // get userid from session token
+            // get lessonscompleted from progresses
+            // join course titles
+            PreparedStatement ps = main.db.prepareStatement("SELECT LessonsCompleted FROM progresses WHERE UserID = ?");
+            // count the lessons in the eah course to calculate a percentage of the way through
+            // return the course name with the percentage
+            ps.setInt(1, UserID);
+            ResultSet results = ps.executeQuery();
+            JSONObject response = new JSONObject();
+            if (results.next() == true) {
+                if (results.getString(1) != "") {
+                    response.put("SessionToken", true);
+                } else {
+                    response.put("SessionToken", false);
+                }
+            }
+            return response.toString();
+        } catch (Exception exception) {
+            System.out.println("Database error: " + exception.getMessage());
+            return "{\"Error\": \"Unable to get item, please see server console for more info.\"}";
+        }
+    }
 }
