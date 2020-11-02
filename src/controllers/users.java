@@ -22,10 +22,6 @@ public class users {
      // create function for sha256 hash
     // https://www.baeldung.com/sha-256-hashing-java
     // https://docs.google.com/presentation/d/1kpT9LC_3Ckwsk7YjoMKgYHTr9a_DcP3kZQ-oeea9anA/edit?usp=sharing
-       public static void main(String[] args) {
-           String text = "Hello there everybody";
-           System.out.println(text + " --> " + generateHash(text));
-       }
 
        public static String generateHash(String text) {
            try {
@@ -68,7 +64,7 @@ public class users {
     @Produces(MediaType.APPLICATION_JSON)
     public String UserAttemptLogin(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password) {
         System.out.println("Invoked Users.AttemptLogin()");
-        System.out.println("Invoked Users.AttemptLogin()");
+        System.out.println(generateHash("helloworld"));
         try {
             PreparedStatement ps = main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
             ps.setString(1, Username);
@@ -76,11 +72,7 @@ public class users {
             JSONObject response = new JSONObject();
 
             if (results.next() == true) {
-                MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                byte[] encodehash = digest.digest(Password.getBytes(StandardCharsets.UTF_8));
-                digest = MessageDigest.getInstance("SHA-256");
-                final byte[] hashbytes = digest.digest(Password.getBytes(StandardCharsets.UTF_8));
-                String sha2Hex = bytesToHex(hashbytes);
+                String sha2Hex = generateHash(Password);
                 System.out.println(sha2Hex);
 
                 // See if password guess equals the password
