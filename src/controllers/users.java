@@ -64,7 +64,6 @@ public class users {
     @Produces(MediaType.APPLICATION_JSON)
     public String UserAttemptLogin(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password) {
         System.out.println("Invoked Users.AttemptLogin()");
-        System.out.println(generateHash("helloworld"));
         try {
             PreparedStatement ps = main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
             ps.setString(1, Username);
@@ -73,7 +72,6 @@ public class users {
 
             if (results.next() == true) {
                 String sha2Hex = generateHash(Password);
-                System.out.println(sha2Hex);
 
                 // See if password guess equals the password
                 if (results.getString(1) == sha2Hex) {
