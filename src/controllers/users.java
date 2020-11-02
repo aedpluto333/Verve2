@@ -27,7 +27,7 @@ public class users {
            try {
                MessageDigest hasher = MessageDigest.getInstance("SHA-256");
                hasher.update(text.getBytes());
-               return DatatypeConverter.printHexBinary(hasher.digest()).toUpperCase();
+               return DatatypeConverter.printHexBinary(hasher.digest()).toLowerCase();
            } catch (NoSuchAlgorithmException nsae) {
                return nsae.getMessage();
            }
@@ -74,7 +74,21 @@ public class users {
                 String sha2Hex = generateHash(Password);
 
                 // See if password guess equals the password
+                System.out.println(results.getString(1));
+                System.out.println(sha2Hex);
                 if (results.getString(1) == sha2Hex) {
+                    /*
+                    //https://docs.google.com/presentation/d/1nMsSzWwXeCvzod9FwE4b96sdEH8hTkaLcfv8OI6oDV4/edit?usp=sharing
+                    String token = UUID.randomUUID().toString();
+                   PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Users SET Token = ? WHERE Username = ?");
+                   ps2.setString(1, token);
+                   ps2.setString(2, username);
+                   ps2.executeUpdate();
+                   JSONObject userDetails = new JSONObject();
+                   userDetails.put("username", username);
+                   userDetails.put("token", token);
+                   return userDetails.toString();
+                     */
                     response.put("Success", true);
                 } else {
                     response.put("Success", false);
