@@ -37,6 +37,10 @@ public class users {
     @Path("loggedin/{UserID}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
+    // The API takes in the UserID as input.
+    // Search the database on that user
+    // If there's a session token in the field
+    // return true
     public String UserLoggedIn(@PathParam("UserID") Integer UserID) {
         System.out.println("Invoked Users.LoggedIn() with UserID " + UserID);
         try {
