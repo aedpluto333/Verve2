@@ -49,7 +49,7 @@ public class users {
             JSONObject response = new JSONObject();
             // If there's a session token in the field, the user is logged in so return true
             if (results.next() == true) {
-                if (results.getString(1) != "") {
+                if (results.getString(1) != null) {
                     response.put("SessionToken", true);
                 } else {
                     response.put("SessionToken", false);
