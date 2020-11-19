@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 
 @Path("users/")
@@ -82,22 +83,22 @@ public class users {
                 String sha2Hex = generateHash(Password);
 
                 // See if password guess equals the password
-                System.out.println(results.getString(1));
-                System.out.println(sha2Hex);
-                if (results.getString(1) == sha2Hex) {
-                    /*
-                    //https://docs.google.com/presentation/d/1nMsSzWwXeCvzod9FwE4b96sdEH8hTkaLcfv8OI6oDV4/edit?usp=sharing
-                    String token = UUID.randomUUID().toString();
-                   PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Users SET Token = ? WHERE Username = ?");
-                   ps2.setString(1, token);
-                   ps2.setString(2, username);
-                   ps2.executeUpdate();
-                   JSONObject userDetails = new JSONObject();
-                   userDetails.put("username", username);
-                   userDetails.put("token", token);
-                   return userDetails.toString();
-                     */
-                    response.put("Success", true);
+                if (results.getString(1).equals(sha2Hex)) {
+                     //https://docs.google.com/presentation/d/1nMsSzWwXeCvzod9FwE4b96sdEH8hTkaLcfv8OI6oDV4/edit?usp=sharing
+
+                    // create a random session token
+                     String token = UUID.randomUUID().toString();
+
+                     // set the session token in the database to the value calculated above
+                     PreparedStatement ps2 = main.db.prepareStatement("UPDATE Users SET SessionToken = ? WHERE Username = ?");
+                     ps2.setString(1, token);
+                     ps2.setString(2, Username);
+                     ps2.executeUpdate();
+
+                     // output the result
+                     response.put("Success", true);
+                     response.put("Username", Username);
+                     response.put("SessionToken", token);
                 } else {
                     response.put("Success", false);
                 }
@@ -111,21 +112,21 @@ public class users {
     }
 
     @GET
-    @Path("listprogress/{UserID}")
+    @Path("listprogress/{SessionToken}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String UserListProgress(@PathParam("UserID") Integer UserID) {
-        System.out.println("Invoked Users.listprogress() with UserID " + UserID);
+    // API to list the progress in each topic made by the user
+    // Take session token as user input                                                 !!!!!!!!!!!!
+    public String UserListProgress(@PathParam("SessionToken") String SessionToken) {
+        System.out.println("Invoked Users.listprogress() with SessionToken " + SessionToken);
         try {
             // look at the progresses link table and count the number of lessons completed for each course
-            // actually this should use the session token instead of the user id
-            // get userid from session token
-            // get lessonscompleted from progresses
+            // gets the userid from the session token and finds the lessonscompleted from progresses
             // join course titles
-            PreparedStatement ps = main.db.prepareStatement("SELECT LessonsCompleted FROM progresses WHERE UserID = ?");
-            // count the lessons in the eah course to calculate a percentage of the way through
+            PreparedStatement ps = main.db.prepareStatement("SELECT LessonsCompleted FROM progresses WHERE UserID = (SELECT UserID FROM Users WHERE SessionToken = ?)");
+            // count the lessons in the each course to calculate a percentage of the way through
             // return the course name with the percentage
-            ps.setInt(1, UserID);
+            ps.setString(1, SessionToken);
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
             if (results.next() == true) {
