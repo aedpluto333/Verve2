@@ -37,17 +37,16 @@ public class users {
     @Path("loggedin/{UserID}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    // The API takes in the UserID as input.
-    // Search the database on that user
-    // If there's a session token in the field
-    // return true
+    // The API takes in the UserID as input
     public String UserLoggedIn(@PathParam("UserID") Integer UserID) {
         System.out.println("Invoked Users.LoggedIn() with UserID " + UserID);
         try {
+            // Search the database for a session token on UserID
             PreparedStatement ps = main.db.prepareStatement("SELECT SessionToken FROM Users WHERE UserID = ?");
             ps.setInt(1, UserID);
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
+            // If there's a session token in the field, the user is logged in so return true
             if (results.next() == true) {
                 if (results.getString(1) != "") {
                     response.put("SessionToken", true);
@@ -66,15 +65,20 @@ public class users {
     @Path("attemptlogin")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
+    // API to help a user login
+    // Takes form data as parameters: Username, Password
     public String UserAttemptLogin(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password) {
         System.out.println("Invoked Users.AttemptLogin()");
         try {
+            // Checks for a password under the given username
+            // Could throw an error is that user does not exist
             PreparedStatement ps = main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
             ps.setString(1, Username);
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
 
             if (results.next() == true) {
+                // Hash the password (guess) the user entered via the login page
                 String sha2Hex = generateHash(Password);
 
                 // See if password guess equals the password
