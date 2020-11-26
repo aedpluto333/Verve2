@@ -25,7 +25,7 @@ public class lessons {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     // API takes a search term as input in the URL
-    public String UserLoggedIn(@PathParam("SearchTerm") Integer SearchTerm) {
+    public String ListLessons(@PathParam("SearchTerm") Integer SearchTerm) {
         System.out.println("Invoked Users.LoggedIn() with UserID " + UserID);
         try {
             // Search the database for all lessons where
