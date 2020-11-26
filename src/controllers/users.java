@@ -142,4 +142,31 @@ public class users {
             return "{\"Error\": \"Unable to get item, please see server console for more info.\"}";
         }
     }
+
+    @POST
+    @Path("logout")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    // API method to log a user out of their account
+    public String Logout(@FormDataParam("SessionToken") String SessionToken) {
+        System.out.println("Invoked Users.Logout()");
+        try {
+            // Remove the session token from the database of the user currently logged in
+            PreparedStatement ps = main.db.prepareStatement("UPDATE Users SET SessionToken = '' WHERE SessionToken = ?");
+            ps.setString(1, SessionToken);
+            ResultSet results = ps.executeQuery();
+            JSONObject response = new JSONObject();
+
+            if (results.next() == true) {
+                // output if the user has been sucessfully logged out
+                response.put("Success", true);
+            }
+
+            return response.toString();
+        } catch (Exception exception) {
+            System.out.println("Database error: " + exception.getMessage());
+            return "{\"Error\": \"Unable to logout, please see server console for more info.\"}";
+        }
+    }
+
 }
