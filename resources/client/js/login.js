@@ -1,4 +1,4 @@
-// login function to allow user to access the websote
+// login function to allow user to access the website
 function logInUser() {
     console.log("Invoked Login()");
     const formData = new FormData(document.getElementById('LoginForm'));
