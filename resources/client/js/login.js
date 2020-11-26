@@ -1,4 +1,4 @@
-// login function to add a user to the database
+// login function to allow user to access the websote
 function logInUser() {
     console.log("Invoked Login()");
     const formData = new FormData(document.getElementById('LoginForm'));
@@ -16,3 +16,5 @@ function logInUser() {
             window.open("/client/user.html", "_self");
     });
 }
+
+// logout function to remove user session token from database
