@@ -65,7 +65,23 @@ public class lessons {
 
     @POST
     @PATH("getnextlesson")
-    @Consumes()
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String GetNextLesson(@FormDataParam("LessonID") int LessonID) {
+        try {
+            PreparedStatement ps = main.db.prepareStatement("SELECT * FROM Lessons WHERE LessonID = ? + 1");
+            ps.setInt(1, LessonID);
+            ResultSet results = ps.executeQuery();
+            JSONObject response = new JSONObject();
+
+            if (results.next() == true) {
+                response.put(results.getInt(1))
+            }
+        } catch (Exception exception) {
+            System.out.println("Database error: " + exception.getMessage());
+            return "{\"Error\": \"Unable to get data, please see server console for more info.\"}";
+        }
+    }
 
 
 }
