@@ -12,7 +12,6 @@ import org.sqlite.SQLiteConfig;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-
 public class main {
 
     public static Connection db = null;
