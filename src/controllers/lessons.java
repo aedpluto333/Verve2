@@ -63,12 +63,18 @@ public class lessons {
         }
     }
 
+
+    // probably don't need this GetNextLesson API method
+    // store the current lesson number on the page
+    // when next is pressed add one to the lesson number then reload the page
+    // converting it to an ordinary GetLesson method
+
     @POST
-    @Path("getnextlesson")
+    @Path("getlesson")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String GetNextLesson(@FormDataParam("LessonID") int LessonID) {
-        System.out.println("Invoked Lessons.GetNextLesson() with LessonID " + LessonID);
+    public String GetLesson(@FormDataParam("LessonID") int LessonID) {
+        System.out.println("Invoked Lessons.GetLesson() with LessonID " + LessonID);
         try {
             PreparedStatement ps = main.db.prepareStatement("SELECT * FROM Lessons WHERE LessonID = ? + 1");
             ps.setInt(1, LessonID);
