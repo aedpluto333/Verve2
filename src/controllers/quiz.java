@@ -66,7 +66,7 @@ public class quiz {
                 // Update quizguesses
                 // Return whether correct or false
                 PreparedStatement ps = main.db.prepareStatement("SELECT Correct FROM options WHERE Option = ?;" +
-                        "INSERT INTO quizGuesses (OptionID, UserID) VALUES ((SELECT OptionID FROM Options WHERE Option=?), ?)";
+                        "INSERT INTO quizGuesses (OptionID, UserID) VALUES ((SELECT OptionID FROM Options WHERE Option=?), ?)");
                 ps.setInt(1, Option);
                 ResultSet results = ps.executeQuery();
                 JSONObject response = new JSONObject();
