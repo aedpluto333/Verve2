@@ -18,23 +18,33 @@ public class quiz {
         @Path("get/{LessonID}")
         @Consumes(MediaType.MULTIPART_FORM_DATA)
         @Produces(MediaType.APPLICATION_JSON)
-        //
-        public String UserLoggedIn(@PathParam("LessonID") Integer LessonID) {
+        // API method to get the quiz question and options
+        public String GetQuiz(@PathParam("LessonID") Integer LessonID) {
             System.out.println("Invoked Quiz.Get() with LessonID " + LessonID);
             try {
-                // Get the data from the quiz table
-                PreparedStatement ps = main.db.prepareStatement("SELECT * FROM Quizzes WHERE LessonID = ?");
-                ps.setInt(1, LessonID);
-                ResultSet results = ps.executeQuery();
+                // Get the question from the quiz table
+                PreparedStatement ps1 = main.db.prepareStatement("SELECT Question FROM questions WHERE QuestionID = (SELECT QuestionID FROM lessons WHERE LessonID = ?)");
+                ps1.setInt(1, LessonID);
+                ResultSet results1 = ps1.executeQuery();
                 JSONObject response = new JSONObject();
-                // If there's a session token in the field, the user is logged in so return true
-                if (results.next() == true) {
-                    if (results.getString(1) != null) {
-                        response.put("SessionToken", true);
-                    } else {
-                        response.put("SessionToken", false);
-                    }
+
+                if (results1.next() == true) {
+                    response.put("Question", results1.getString(1));
                 }
+
+                // Get the options from the quiz table
+                PreparedStatement ps2 = main.db.prepareStatement("SELECT Option FROM options WHERE OptionID = (SELECT OptionID FROM options WHERE QuestionID = (SELECT QuestionID FROM lessons WHERE LessonID = ?))");
+                ps2.setInt(1, LessonID);
+                ResultSet results2 = ps2.executeQuery();
+                // could be coded better
+                String labels[] = {"Option1", "Option2", "Option3", "Option4"};
+                int count = 0;
+
+                if (results1.next() == true) {
+                    response.put(labels[count], results2.getString(1));
+                    count++;
+                }
+
                 return response.toString();
             } catch (Exception exception) {
                 System.out.println("Database error: " + exception.getMessage());
@@ -49,37 +59,20 @@ public class quiz {
         // API to mark the quiz on the lessons page
         // update the database
         // then return a result
-        public String UserAttemptLogin(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password) {
+        public String Mark(@FormDataParam("Option") int Option, @FormDataParam("UserID") String UserID) {
             System.out.println("Invoked Users.AttemptLogin()");
             try {
-                // Checks for a password under the given username
-                // Could throw an error is that user does not exist
-                PreparedStatement ps = main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
-                ps.setString(1, Username);
+                // Update score in progresses table
+                // Update quizguesses
+                // Return whether correct or false
+                PreparedStatement ps = main.db.prepareStatement("SELECT Correct FROM options WHERE Option = ?;" +
+                        "INSERT INTO quizGuesses (OptionID, UserID) VALUES ((SELECT OptionID FROM Options WHERE Option=?), ?)";
+                ps.setInt(1, Option);
                 ResultSet results = ps.executeQuery();
                 JSONObject response = new JSONObject();
 
                 if (results.next() == true) {
-
-                    if (results.getString(1).equals(sha2Hex)) {
-                        //https://docs.google.com/presentation/d/1nMsSzWwXeCvzod9FwE4b96sdEH8hTkaLcfv8OI6oDV4/edit?usp=sharing
-
-                        // create a random session token
-                        String token = UUID.randomUUID().toString();
-
-                        // set the session token in the database to the value calculated above
-                        PreparedStatement ps2 = main.db.prepareStatement("UPDATE Users SET SessionToken = ? WHERE Username = ?");
-                        ps2.setString(1, token);
-                        ps2.setString(2, Username);
-                        ps2.executeUpdate();
-
-                        // output the result
-                        response.put("Success", true);
-                        response.put("Username", Username);
-                        response.put("SessionToken", token);
-                    } else {
-                        response.put("Success", false);
-                    }
+                        response.put("QuizResult", results.getString(1));
                 }
 
                 return response.toString();
