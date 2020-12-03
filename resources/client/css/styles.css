@@ -49,7 +49,7 @@ h1,h2,p,li,label,button {
 
 
 /* styles for the login page */
-.loginButton, .quizSubmitButton {
+.specialButton {
     background: #02b302;
     color: white;
 }
