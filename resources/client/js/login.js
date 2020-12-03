@@ -14,8 +14,8 @@ function logInUser() {
         } else {
             // URL replaces the current page
             window.open("/client/user.html", "_self");
-        });
-    }
+        }
+    });
 }
 
 // logout function to remove user session token from database
