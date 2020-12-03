@@ -6,8 +6,6 @@ import server.main;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.xml.bind.DatatypeConverter;
-import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.UUID;
@@ -24,8 +22,8 @@ public class quiz {
         public String UserLoggedIn(@PathParam("LessonID") Integer LessonID) {
             System.out.println("Invoked Quiz.Get() with LessonID " + LessonID);
             try {
-                // Search the database for a session token on UserID
-                PreparedStatement ps = main.db.prepareStatement("SELECT SessionToken FROM Users WHERE UserID = ?");
+                // Get the data from the quiz table
+                PreparedStatement ps = main.db.prepareStatement("SELECT * FROM Quizzes WHERE LessonID = ?");
                 ps.setInt(1, LessonID);
                 ResultSet results = ps.executeQuery();
                 JSONObject response = new JSONObject();
