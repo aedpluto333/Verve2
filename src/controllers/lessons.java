@@ -106,37 +106,36 @@ public class lessons {
     @Produces(MediaType.APPLICATION_JSON)
         // API takes a search term as input in the URL
         public String Recommend() {
-            System.out.println("Invoked Lessons.Recommend()");
-            try {
-                // find the number of courses in the database
-                // and randomly select a course ID
-                PreparedStatement ps1 = main.db.prepareStatement("FLOOR(RAND()*COUNT(SELECT CourseID FROM Courses))");
-                ResultSet results1 = ps1.executeQuery();
-                JSONObject response1 = new JSONObject();
+        System.out.println("Invoked Lessons.Recommend()");
+        try {
+            // find the number of courses in the database
+            // and randomly select a course ID
+            PreparedStatement ps1 = main.db.prepareStatement("FLOOR(RAND()*COUNT(SELECT CourseID FROM Courses))");
+            ResultSet results1 = ps1.executeQuery();
+            JSONObject response1 = new JSONObject();
 
+            // find the number of lessons in the course
+            // and randomly select a lesson ID
+            PreparedStatement ps2 = main.db.prepareStatement("FLOOR(RAND()*COUNT(SELECT LessonID FROM Lessons WHERE CourseID = ?))");
+            ResultSet results2 = ps2.executeQuery();
+            JSONObject response2 = new JSONObject();
 
-                // find the number of lessons in the course
-                // and randomly select a lesson ID
-                PreparedStatement ps2 = main.db.prepareStatement("FLOOR(RAND()*COUNT(SELECT LessonID FROM Lessons WHERE CourseID = ?))");
-                ResultSet results2 = ps2.executeQuery();
-                JSONObject response2 = new JSONObject();
-
-                // return the lesson title, lessonID and the associated image
-                PreparedStatement ps3 = main.db.prepareStatement("SELECT LessonID, Name, Picture FROM WHERE LessonID = ?");
-                ResultSet results3 = ps3.executeQuery();
-                JSONObject response3 = new JSONObject();
-                String labels[] = {"LessonID", "Name", "Picture"};
-                int count = 0;
-                if (results3.next() == true) {
-                    response3.put(labels[count], results3.getString(1));
-                    count++;
-                }
-
-                return response3.toString();
-            } catch (Exception exception) {
-                System.out.println("Database error: " + exception.getMessage());
-                return "{\"Error\": \"Unable to get data, please see server console for more info.\"}";
+            // return the lesson title, lessonID and the associated image
+            PreparedStatement ps3 = main.db.prepareStatement("SELECT LessonID, Name, Picture FROM WHERE LessonID = ?");
+            ResultSet results3 = ps3.executeQuery();
+            JSONObject response3 = new JSONObject();
+            String labels[] = {"LessonID", "Name", "Picture"};
+            int count = 0;
+            if (results3.next() == true) {
+                response3.put(labels[count], results3.getString(1));
+                count++;
             }
+
+            return response3.toString();
+        } catch (Exception exception) {
+            System.out.println("Database error: " + exception.getMessage());
+            return "{\"Error\": \"Unable to get data, please see server console for more info.\"}";
         }
+    }
 
 }
