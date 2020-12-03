@@ -11,11 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import javax.xml.bind.DatatypeConverter;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
-
 
 @Path("lessons/")
 
@@ -104,7 +99,7 @@ public class lessons {
     @Path("recommend")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-        // API takes a search term as input in the URL
+        // API recommends a lesson to the user (for the user homepage)
         public String Recommend() {
         System.out.println("Invoked Lessons.Recommend()");
         try {
