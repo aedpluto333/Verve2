@@ -16,21 +16,15 @@ import java.sql.ResultSet;
 
 public class lessons {
     @GET
-    @Path("list/{SearchTerm}")
+    @Path("list")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    // API takes a search term as input in the URL
-    public String ListLessons(@PathParam("SearchTerm") String SearchTerm) {
-        System.out.println("Invoked Lessons.ListLessons() with search term " + SearchTerm);
+    // API returns a list of all titles and ids
+    public String ListLessons() {
+        System.out.println("Invoked Lessons.ListLessons()");
         try {
-            // Search the database for all lessons where
-            // a) the search term is in the title
-            // b) the title is in the search term
-            // c) the search term is in the description
-            // d) the search term is in the extra info
 
-            PreparedStatement ps = main.db.prepareStatement("SELECT LessonID, Name FROM Lessons WHERE ? IN (SELECT Name, Description, ExtraInfo FROM Lessons)");
-            ps.setString(1, SearchTerm);
+            PreparedStatement ps = main.db.prepareStatement("SELECT LessonID, Name FROM Lessons");
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
 
