@@ -68,7 +68,7 @@ public class users {
     @Produces(MediaType.APPLICATION_JSON)
     // API to help a user login
     // Takes form data as parameters: Username, Password
-    public String UserAttemptLogin(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password) {
+    public String UserAttemptLogin(@FormDataParam("username") String Username, @FormDataParam("password") String Password) {
         System.out.println("Invoked Users.AttemptLogin()");
         try {
             // Checks for a password under the given username
@@ -78,7 +78,7 @@ public class users {
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
 
-            if (results.next() == true) {
+            if (results.next()) {
                 // Hash the password (guess) the user entered via the login page
                 String sha2Hex = generateHash(Password);
 
@@ -99,12 +99,14 @@ public class users {
                      response.put("Success", true);
                      response.put("Username", Username);
                      response.put("SessionToken", token);
+                     return response.toString();
                 } else {
-                    response.put("Success", false);
+                    return "{\"Error\": \"Incorrect password!\"}";
                 }
+            }else{
+                return "{\"Error\": \"Incorrect username.\"}";
             }
 
-            return response.toString();
         } catch (Exception exception) {
             System.out.println("Database error: " + exception.getMessage());
             return "{\"Error\": \"Unable to get item, please see server console for more info.\"}";
@@ -166,6 +168,27 @@ public class users {
         } catch (Exception exception) {
             System.out.println("Database error: " + exception.getMessage());
             return "{\"Error\": \"Unable to logout, please see server console for more info.\"}";
+        }
+    }
+
+    @POST
+    @Path("addUser")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String addUser(@FormDataParam("username") String username, @FormDataParam("password") String password){
+        System.out.println("Invoked Users.addUser()");
+        try{
+            PreparedStatement ps = main.db.prepareStatement("INSERT INTO Users (Username, Password, SessionToken) VALUES(?,?,?)");
+            String hash = generateHash(password);
+            String token = UUID.randomUUID().toString();
+            ps.setString(1,username);
+            ps.setString(2,hash);
+            ps.setString(3,token);
+            ps.executeUpdate();
+            return "{\"Success\": \"New account successfully added.\"}";
+        }catch(Exception e){
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"Error\": \"Unable to add user, please see server console for more info.\"}";
         }
     }
 
