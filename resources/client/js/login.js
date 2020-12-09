@@ -2,7 +2,7 @@
 function logInUser() {
     console.log("Invoked Login()");
     const formData = new FormData(document.getElementById('LoginForm'));
-    let url = "/users/login";
+    let url = "/users/attemptlogin";
     fetch(url, {
         method: "POST",
         body: formData,
