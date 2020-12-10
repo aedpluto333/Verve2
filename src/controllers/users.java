@@ -73,17 +73,17 @@ public class users {
         try {
             // Checks for a password under the given username
             // Could throw an error is that user does not exist
-            PreparedStatement ps = main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
-            ps.setString(1, Username);
-            ResultSet results = ps.executeQuery();
+            PreparedStatement ps1 = main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
+            ps1.setString(1, Username);
+            ResultSet loginResults = ps1.executeQuery();
             JSONObject response = new JSONObject();
 
-            if (results.next() == true) {
+            if (loginResults.next() == true) {
                 // Hash the password (guess) the user entered via the login page
                 String sha2Hex = generateHash(Password);
 
                 // See if password guess equals the password
-                if (results.getString(1).equals(sha2Hex)) {
+                if (loginResults.getString(1).equals(sha2Hex)) {
                      //https://docs.google.com/presentation/d/1nMsSzWwXeCvzod9FwE4b96sdEH8hTkaLcfv8OI6oDV4/edit?usp=sharing
 
                     // create a random session token
@@ -96,7 +96,6 @@ public class users {
                      ps2.executeUpdate();
 
                      // output the result
-                     response.put("Success", true);
                      response.put("Username", Username);
                      response.put("SessionToken", token);
                 } else {

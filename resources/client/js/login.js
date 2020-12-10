@@ -14,7 +14,8 @@ function logInUser() {
             alert(JSON.stringify(response));
         } else {
             // URL replaces the current page
-            //Cookies.set("SessionToken")
+            Cookies.set("SessionToken", response.SessionToken);
+            Cookies.set("Username", response.Username);
             window.open("/client/user.html", "_self");
         }
     });
