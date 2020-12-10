@@ -18,6 +18,7 @@ function logInUser() {
             Cookies.set("SessionToken", response.SessionToken);
             Cookies.set("Username", response.Username);
             window.open("/client/user.html", "_self");
+            getImageRecommended();
         }
     });
 }

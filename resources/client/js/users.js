@@ -36,7 +36,7 @@ function getImageRecommended() {
         if (response.hasOwnProperty("Error")) {         //checks if response from server has an "Error"
             alert(JSON.stringify(response));               // if it does, convert JSON object to string and alert
         } else {
-            document.getElementById("recommendedImage").dir = response;
+            document.getElementById("recommendedImage").src = response;
         }
     });
 }
