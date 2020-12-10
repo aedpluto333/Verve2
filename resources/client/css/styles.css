@@ -49,12 +49,12 @@ h1,h2,p,li,label,button {
 
 
 /* styles for the login page */
-.loginButton, .quizSubmitButton {
+.specialButton {
     background: #02b302;
     color: white;
 }
 
-/* syles for the user homepage */
+/* styles for the user homepage */
 
 
 /* styles for the courses page */
@@ -62,8 +62,3 @@ h1,h2,p,li,label,button {
     background: #d2f7ea;
     width: 50%;
 }
-
-/* styles for the results page */
-
-
-/* styles for the sitemap */
