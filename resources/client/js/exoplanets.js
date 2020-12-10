@@ -23,25 +23,17 @@ function draw() {
     background(0);
     noStroke();
 
-    // draw star and planet
+    // draw star
+    fill(255, 255, 0);
+    ellipse(s[0], s[1], s[2], s[2]);
+
+    // draw planet
+    fill(100);
     if (behindStar) {
-        // draw the planet first
-        fill(100);
-        ellipse(p[0], p[1], p[2], p[2]);
-
-        // then draw the star over it
         fill(255, 255, 0);
-        ellipse(s[0], s[1], s[2], s[2]);
-    } else {
-        // draw the star first
-        fill(255, 255, 0);
-        ellipse(s[0], s[1], s[2], s[2]);
-
-        // then draw the planet over it
-        fill(100);
-        ellipse(p[0], p[1], p[2], p[2]);
     }
-    // update position of planet for the next iteration
+    document.getElementById("gameTitle").innerHTML = count;
+    ellipse(p[0], p[1], p[2], p[2]);
     count += 0.01;
     p[0] = width/2 + Math.sin(count)*200;
 
