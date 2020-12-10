@@ -1,4 +1,5 @@
-// login function to allow user to access the website
+// login function to allow user to access the
+//        !!! LOGGING IN ONLY EVER WORKS ON THE SECOND ATTEMPT !!!          ///
 function logInUser() {
     console.log("Invoked logInUser()");
     //debugger;
