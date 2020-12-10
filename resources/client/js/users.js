@@ -1,4 +1,4 @@
-"use strict";
+/*"use strict";
 function getUsersList() {
     console.log("Invoked ListLessons()");
     const url = "/lessons/list/";    		// API method on web server is in Users class
@@ -21,4 +21,22 @@ function formatUsersList(myJSONArray){
         dataHTML += "<tr><td>" + item.UserID + "<td><td>" + item.UserName + "<tr><td>";
     }
     document.getElementById("UsersTable").innerHTML = dataHTML;
+}
+*/
+
+function getImageRecommended() {
+    console.log("Invoked getImageRecommendation()");
+    //debugger;
+    const url = "/users/recommend/";                       // API method on webserver
+    fetch(url, {
+        method: "GET",
+    }).then(response => {
+        return response.json();                            //return response to JSON
+    }).then(response => {
+        if (response.hasOwnProperty("Error")) {         //checks if response from server has an "Error"
+            alert(JSON.stringify(response));               // if it does, convert JSON object to string and alert
+        } else {
+            document.getElementById("recommendedImage").dir = response;
+        }
+    });
 }
