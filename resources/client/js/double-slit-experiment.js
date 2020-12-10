@@ -51,10 +51,18 @@ function draw() {
     var ypos = height*0.1;
     var distToSlit1 = ((xpos-slit1x)**2 + (ypos-slity)**2)**(1/2);
     var distToSlit2 = ((xpos-slit2x)**2 + (ypos-slity)**2)**(1/2);
+
+    // put into a scale which is visible on the user's screen
+    distToSlit1 -= 290;
+    distToSlit2 -= 290;
+    distToSlit1 *= 12;
+    distToSlit2 *= 12;
+
     // is the break in blue dots caused by the distance to the slits rather than
     // the function actually working?
-    var wavelength = 99;
-    var intensity = Math.abs(Math.sin(distToSlit1/wavelength) + Math.sin(distToSlit2/wavelength))*50;
+    //javascript works in radians -> multiply by (pi/180)
+    var intensity = (Math.sin((distToSlit1*Math.PI)/180) + Math.sin((distToSlit2*Math.PI)/180)+2)*50;
+
 
     fill(255, 0, 0, intensity);
     ellipse(xpos, ypos, dotSize, dotSize);

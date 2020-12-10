@@ -1,7 +1,7 @@
 // login function to allow user to access the website
 function logInUser() {
     console.log("Invoked logInUser()");
-    debugger;
+    //debugger;
     const formData = new FormData(document.getElementById('LoginForm'));
     let url = "/users/attemptlogin";
     fetch(url, {
@@ -14,7 +14,7 @@ function logInUser() {
             alert(JSON.stringify(response));
         } else {
             // URL replaces the current page
-            Cookies.set("SessionToken")
+            //Cookies.set("SessionToken")
             window.open("/client/user.html", "_self");
         }
     });
