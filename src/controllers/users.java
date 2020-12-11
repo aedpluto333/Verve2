@@ -90,7 +90,7 @@ public class users {
                      String token = UUID.randomUUID().toString();
 
                      // set the session token in the database to the value calculated above
-                     PreparedStatement ps2 = main.db.prepareStatement("UPDATE Users SET SessionToken = ? WHERE Username = ?");
+                     PreparedStatement ps2 = main.db.prepareStatement("UPDATE users SET SessionToken = ? WHERE Username = ?");
                      ps2.setString(1, token);
                      ps2.setString(2, Username);
                      ps2.executeUpdate();
