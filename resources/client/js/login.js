@@ -15,6 +15,7 @@ function logInUser() {
             alert(JSON.stringify(response));
         } else {
             // URL replaces the current page
+            alert(JSON.stringify(response));
             Cookies.set("SessionToken", response.SessionToken);
             Cookies.set("Username", response.Username);
             window.open("/client/user.html", "_self");
