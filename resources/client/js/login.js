@@ -24,3 +24,21 @@ function logInUser() {
 }
 
 // logout function to remove user session token from database
+function logout() {
+    debugger;
+    console.log("Invoked logout");
+    let url = "/users/logout";
+    fetch(url, {method: "POST"
+    }).then(response => {
+        return response.json();                 //now return that promise to JSON
+    }).then(response => {
+        if (response.hasOwnProperty("Error")) {
+            alert(JSON.stringify(response));        // if it does, convert JSON object to string and alert
+        } else {
+            Cookies.remove("SessionToken", response.SessionToken);    //UserName and Token are removed
+            Cookies.remove("Username", response.Username);
+            window.open("login.html", "_self");       //open index.html in same tab
+        }
+    });
+}
+
