@@ -73,7 +73,7 @@ public class users {
         try {
             // Checks for a password under the given username
             // Could throw an error is that user does not exist
-            PreparedStatement ps1 = main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
+            PreparedStatement ps1 = main.db.prepareStatement("SELECT Password FROM users WHERE Username = ?");
             ps1.setString(1, Username);
             ResultSet loginResults = ps1.executeQuery();
             JSONObject response = new JSONObject();
@@ -109,6 +109,7 @@ public class users {
             return "{\"Error\": \"Unable to get item, please see server console for more info.\"}";
         }
     }
+
 
     @GET
     @Path("listprogress/{SessionToken}")
