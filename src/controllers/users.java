@@ -43,7 +43,7 @@ public class users {
         System.out.println("Invoked Users.LoggedIn() with UserID " + UserID);
         try {
             // Search the database for a session token on UserID
-            PreparedStatement ps = main.db.prepareStatement("SELECT SessionToken FROM Users WHERE UserID = ?");
+            PreparedStatement ps = main.db.prepareStatement("SELECT SessionToken FROM users WHERE UserID = ?");
             ps.setInt(1, UserID);
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
@@ -152,13 +152,13 @@ public class users {
         try{
             System.out.println("Invoked Users.Logout() with " + SessionToken);
             // Remove the session token from the database of the user currently logged in
-            PreparedStatement ps = main.db.prepareStatement("SELECT UserID FROM Users WHERE SessionToken=?");
+            PreparedStatement ps = main.db.prepareStatement("SELECT UserID FROM users WHERE SessionToken=?");
             ps.setString(1, SessionToken);
             ResultSet logoutResults = ps.executeQuery();
             if (logoutResults.next()){
                 int UserID = logoutResults.getInt(1);
                 //Set the token to null to indicate that the user is not logged in
-                PreparedStatement ps1 = main.db.prepareStatement("UPDATE Users SET SessionToken = NULL WHERE UserID = ?");
+                PreparedStatement ps1 = main.db.prepareStatement("UPDATE users SET SessionToken = NULL WHERE UserID = ?");
                 ps1.setInt(1, UserID);
                 ps1.executeUpdate();
                 // output if the user has been sucessfully logged out
