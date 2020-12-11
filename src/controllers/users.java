@@ -144,28 +144,34 @@ public class users {
 
     @POST
     @Path("logout")
+    // might not need these two lines
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     // API method to log a user out of their account
-    public String Logout(@FormDataParam("SessionToken") String SessionToken) {
-        System.out.println("Invoked Users.Logout()");
-        try {
+    public static String Logout(@CookieParam("SessionToken") String SessionToken){
+        try{
+            System.out.println("Invoked Users.Logout() with " + SessionToken);
             // Remove the session token from the database of the user currently logged in
-            PreparedStatement ps = main.db.prepareStatement("UPDATE Users SET SessionToken = '' WHERE SessionToken = ?");
+            PreparedStatement ps = main.db.prepareStatement("SELECT UserID FROM Users WHERE SessionToken=?");
             ps.setString(1, SessionToken);
-            ResultSet results = ps.executeQuery();
-            JSONObject response = new JSONObject();
-
-            if (results.next() == true) {
+            ResultSet logoutResults = ps.executeQuery();
+            if (logoutResults.next()){
+                int UserID = logoutResults.getInt(1);
+                //Set the token to null to indicate that the user is not logged in
+                PreparedStatement ps1 = main.db.prepareStatement("UPDATE Users SET SessionToken = NULL WHERE UserID = ?");
+                ps1.setInt(1, UserID);
+                ps1.executeUpdate();
                 // output if the user has been sucessfully logged out
-                response.put("Success", true);
-            }
+                return "{\"Status\": \"OK\"}";
+            } else {
+                return "{\"Error\": \"Invalid session token\"}";
 
-            return response.toString();
-        } catch (Exception exception) {
-            System.out.println("Database error: " + exception.getMessage());
-            return "{\"Error\": \"Unable to logout, please see server console for more info.\"}";
+            }
+        } catch (Exception ex) {
+            System.out.println("Database error during /users/logout: " + ex.getMessage());
+            return "{\"Error\": \"Server side error!\"}";
         }
     }
+
 
 }
