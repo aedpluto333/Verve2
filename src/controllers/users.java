@@ -120,10 +120,11 @@ public class users {
     // Takes form data as parameters: Username, Password
     public String UserAttemptLogin(@FormDataParam("Username") String Username, @FormDataParam("Password") String Password) {
         System.out.println("Invoked Users.AttemptLogin()");
+        boolean successful = false;
         try {
             // Checks for a password under the given username
             // Could throw an error is that user does not exist
-            PreparedStatement ps = main.db.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
+            PreparedStatement ps = main.db.prepareStatement("SELECT Password FROM users WHERE Username = ?");
             ps.setString(1, Username);
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
@@ -140,20 +141,18 @@ public class users {
                     String token = UUID.randomUUID().toString();
 
                     // set the session token in the database to the value calculated above
-                    PreparedStatement ps2 = main.db.prepareStatement("UPDATE Users SET SessionToken = ? WHERE Username = ?");
+                    PreparedStatement ps2 = main.db.prepareStatement("UPDATE users SET SessionToken = ? WHERE Username = ?");
                     ps2.setString(1, token);
                     ps2.setString(2, Username);
                     ps2.executeUpdate();
 
                     // output the result
-                    response.put("Success", true);
                     response.put("Username", Username);
                     response.put("SessionToken", token);
-                } else {
-                    response.put("Success", false);
                 }
             }
 
+            response.put("Success", successful);
             return response.toString();
         } catch (Exception exception) {
             System.out.println("Database error: " + exception.getMessage());
