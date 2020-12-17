@@ -28,7 +28,7 @@ public class lessons {
             JSONArray lessons = new JSONArray();
 
             // not sorting based on the quality of the result
-            if (results.next() == true) {
+            while (results.next() == true) {
                 JSONArray currentLesson = new JSONArray();
                 currentLesson.add(results.getString(1));
                 currentLesson.add(results.getString(2));

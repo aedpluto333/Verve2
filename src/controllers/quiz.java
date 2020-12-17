@@ -29,7 +29,7 @@ public class quiz {
                 JSONObject response = new JSONObject();
 
                 boolean returnedResult = false;
-                if (results1.next() == true) {
+                while (results1.next() == true) {
                     response.put("Question", results1.getString(1));
                     returnedResult = true;
                 }
@@ -49,7 +49,7 @@ public class quiz {
                 JSONArray options = new JSONArray();
 
                 // expect four options
-                if (results2.next() == true) {
+                while (results2.next() == true) {
                     options.add(results2.getString(1));
                 }
 
