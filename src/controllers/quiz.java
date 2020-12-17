@@ -1,6 +1,7 @@
 package controllers;
 
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.main;
 
@@ -8,7 +9,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.UUID;
 
 @Path("quiz/")
 
@@ -28,23 +28,32 @@ public class quiz {
                 ResultSet results1 = ps1.executeQuery();
                 JSONObject response = new JSONObject();
 
+                boolean returnedResult = false;
                 if (results1.next() == true) {
                     response.put("Question", results1.getString(1));
+                    returnedResult = true;
+                }
+
+                // If no question could be returned there must be a problem
+                if (!returnedResult) {
+                    response.put("Error", "Invalid LessonID");
+                    return response.toString();
                 }
 
                 // Get the options from the quiz table
-                PreparedStatement ps2 = main.db.prepareStatement("SELECT Option FROM options WHERE OptionID = (SELECT OptionID FROM options WHERE QuestionID = (SELECT QuestionID FROM lessons WHERE LessonID = ?))");
+                PreparedStatement ps2 = main.db.prepareStatement("SELECT Option FROM options WHERE QuestionID = (SELECT QuestionID FROM lessons WHERE LessonID = ?)");
                 ps2.setInt(1, LessonID);
                 ResultSet results2 = ps2.executeQuery();
-                // could be coded better
-                String labels[] = {"Option1", "Option2", "Option3", "Option4"};
-                int count = 0;
 
-                if (results1.next() == true) {
-                    response.put(labels[count], results2.getString(1));
-                    count++;
+                // create the array for the results to be stored in
+                JSONArray options = new JSONArray();
+
+                // expect four options
+                if (results2.next() == true) {
+                    options.add(results2.getString(1));
                 }
 
+                response.put("Options", options);
                 return response.toString();
             } catch (Exception exception) {
                 System.out.println("Database error: " + exception.getMessage());
@@ -60,25 +69,43 @@ public class quiz {
         // update the database
         // then return a result
         public String Mark(@FormDataParam("Option") int Option, @FormDataParam("UserID") String UserID) {
-            System.out.println("Invoked Users.AttemptLogin()");
+            System.out.println("Invoked Quiz.Mark()");
             try {
-                // Update score in progresses table
-                // Update quizguesses
-                // Return whether correct or false
-                PreparedStatement ps = main.db.prepareStatement("SELECT Correct FROM options WHERE Option = ?;" +
-                        "INSERT INTO quizGuesses (OptionID, UserID) VALUES ((SELECT OptionID FROM Options WHERE Option=?), ?)");
-                ps.setInt(1, Option);
-                ResultSet results = ps.executeQuery();
+                PreparedStatement ps1 = main.db.prepareStatement("SELECT Correct FROM options WHERE Option = ?;");
+                ps1.setInt(1, Option);
+                ResultSet validityOfOption = ps1.executeQuery();
                 JSONObject response = new JSONObject();
 
-                if (results.next() == true) {
-                        response.put("QuizResult", results.getString(1));
+                // Return whether correct or false
+                boolean returnedResult = false;
+                if (validityOfOption.next() == true) {
+                        response.put("QuizResult", validityOfOption.getBoolean(1));
+                        returnedResult = true;
                 }
+
+                // stop running API method if the option is not in the database
+                // there may be the problem that if two options are the same
+                // but are associated with different questions
+                // the API method may only read the first to come up
+                if (!returnedResult) {
+                    response.put("Error", "Invalid quiz option");
+                    return response.toString();
+                }
+
+                // update the quizguesses table
+                PreparedStatement ps2 = main.db.prepareStatement("INSERT INTO quizguesses (OptionID, UserID) VALUES ((SELECT OptionID FROM options WHERE Option=?), ?)");
+                ps2.setInt(1, Option);
+                ResultSet updateQuizGuessesTable = ps2.executeQuery();
+
+                if (updateQuizGuessesTable.next() == true) {
+                    System.out.println("Ohhh this got triggered");
+                }
+
 
                 return response.toString();
             } catch (Exception exception) {
                 System.out.println("Database error: " + exception.getMessage());
-                return "{\"Error\": \"Unable to get item, please see server console for more info.\"}";
+                return "{\"Error\": \"Unable to mark quiz, please see server console for more info.\"}";
             }
         }
     }

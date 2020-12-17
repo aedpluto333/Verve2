@@ -1,13 +1,11 @@
 package controllers;
 
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.main;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -24,26 +22,21 @@ public class lessons {
         System.out.println("Invoked Lessons.ListLessons()");
         try {
 
-            PreparedStatement ps = main.db.prepareStatement("SELECT LessonID, Name FROM Lessons");
+            PreparedStatement ps = main.db.prepareStatement("SELECT LessonID, Name FROM lessons");
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
+            JSONArray lessons = new JSONArray();
 
-            int slots = 50;
-            int slotsFull = 0;
-            String[] searchResults = new String[slots];
-
-            // prevent there from being too many search results
             // not sorting based on the quality of the result
             if (results.next() == true) {
-                if (slotsFull < slots) {
-                    searchResults[slotsFull] = results.getString(1);
-                    slotsFull++;
-                }
+                JSONArray currentLesson = new JSONArray();
+                currentLesson.add(results.getString(1));
+                currentLesson.add(results.getString(2));
+                lessons.add(currentLesson);
             }
 
             // Output the search results in one array
-            // with a maximum length of "slots"
-            response.put("Results", searchResults);
+            response.put("Results", lessons);
 
             return response.toString();
         } catch (Exception exception) {
@@ -58,25 +51,33 @@ public class lessons {
     // when next is pressed add one to the lesson number then reload the page
     // converting it to an ordinary GetLesson method
 
-    @POST
-    @Path("getlesson")
+    @GET
+    @Path("getlesson/{LessonID}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String GetLesson(@FormDataParam("LessonID") int LessonID) {
+    // This API method lists all of the data required to display a lesson
+    public String GetLesson(@PathParam("LessonID") Integer LessonID) {
         System.out.println("Invoked Lessons.GetLesson() with LessonID " + LessonID);
         try {
-            PreparedStatement ps = main.db.prepareStatement("SELECT * FROM Lessons WHERE LessonID = ? + 1");
+            PreparedStatement ps = main.db.prepareStatement("SELECT * FROM lessons WHERE LessonID = ?");
             ps.setInt(1, LessonID);
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
 
-            // Put all lesson data into an array                !!!!!!!!!!!!!!!!! check the number of spaces needed in this array
-            String[] lessonData = new String[20];
-            int i=0;
+            // Put all lesson data into a JSON array
+            JSONArray lessonData = new JSONArray();
 
+            int i = 0;
             if (results.next() == true) {
-                lessonData[i] = results.getString(1);
-                i++;
+                for (i = 1; i < 10; i++) {
+                    System.out.println(results.getString(i));
+                    lessonData.add(results.getString(i));
+                }
+            }
+
+            if (i==0) {
+                response.put("Error", "Not a valid lesson number");
+                return response.toString();
             }
 
             // output the lesson data

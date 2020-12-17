@@ -11,13 +11,14 @@ function logInUser() {
     }).then(response => {
         return response.json()
     }).then(response => {
-        if (response.hasOwnProperty("Error")) {
+        if (response.hasOwnProperty("Success")) {
             alert(JSON.stringify(response));
         } else {
             // URL replaces the current page
+            alert(JSON.stringify(response));
             Cookies.set("SessionToken", response.SessionToken);
             Cookies.set("Username", response.Username);
-            window.open("user.html", "_self");
+            window.open("/client/user.html", "_self");
             getImageRecommended();
         }
     });
