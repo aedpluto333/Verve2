@@ -84,7 +84,7 @@ public class quiz {
             // Return whether correct or false
             boolean returnedResult = false;
             while (validityOfOption.next() == true) {
-                response.put("QuizResult", validityOfOption.getBoolean(1));
+                response.put("QuizResult", validityOfOption.getString(1));
                 returnedResult = true;
             }
 
