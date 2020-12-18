@@ -232,5 +232,25 @@ public class users {
         }
     }
 
+    // added for testing purposes, please do not remove
+
+    @POST
+    @Path("addUser")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String addUser(@FormDataParam("Username") String username, @FormDataParam("Password") String password){
+        try{
+            PreparedStatement ps = main.db.prepareStatement("INSERT INTO users(Username, Password,SessionToken) VALUES (?,?,?)");
+            String token = UUID.randomUUID().toString();
+            ps.setString(1, username);
+            ps.setString(2,generateHash(password));
+            ps.setString(3, token);
+            ps.executeUpdate();
+            return "{\"OK\": \"Added user.\"}";
+        }catch(Exception e){
+            return "{\"Error\": \""+e.getMessage()+"\"}";
+        }
+    }
+
 
 }

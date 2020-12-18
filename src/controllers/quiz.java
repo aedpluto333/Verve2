@@ -29,7 +29,7 @@ public class quiz {
                 JSONObject response = new JSONObject();
 
                 boolean returnedResult = false;
-                while (results1.next() == true) {
+                if (results1.next() == true) {
                     response.put("Question", results1.getString(1));
                     returnedResult = true;
                 }
@@ -41,7 +41,7 @@ public class quiz {
                 }
 
                 // Get the options from the quiz table
-                PreparedStatement ps2 = main.db.prepareStatement("SELECT OptionID, Option FROM options WHERE QuestionID = (SELECT QuestionID FROM lessons WHERE LessonID = ?)");
+                PreparedStatement ps2 = main.db.prepareStatement("SELECT Option FROM options WHERE QuestionID = (SELECT QuestionID FROM lessons WHERE LessonID = ?)");
                 ps2.setInt(1, LessonID);
                 ResultSet results2 = ps2.executeQuery();
 
@@ -49,13 +49,8 @@ public class quiz {
                 JSONArray options = new JSONArray();
 
                 // expect four options
-                while (results2.next() == true) {
-                    // create an array for each option [OptionID, Option]
-                    JSONArray currentOption = new JSONArray();
-                    currentOption.add(results2.getString(1));
-                    currentOption.add(results2.getString(2));
-                    // Add the array for this specific option to the options array
-                    options.add(currentOption);
+                if (results2.next() == true) {
+                    options.add(results2.getString(1));
                 }
 
                 response.put("Options", options);
@@ -73,39 +68,37 @@ public class quiz {
         // API to mark the quiz on the lessons page
         // update the database
         // then return a result
-        public String Mark(@FormDataParam("OptionID") int OptionID, @FormDataParam("UserID") String UserID) {
+        public String Mark(@FormDataParam("Option") String Option, @FormDataParam("QuestionID") int QuestionID, @ FormDataParam("UserID") String UserID) {
             System.out.println("Invoked Quiz.Mark()");
             try {
-                PreparedStatement ps1 = main.db.prepareStatement("SELECT Correct FROM options WHERE OptionID = ?;");
-                ps1.setInt(1, OptionID);
+                PreparedStatement ps1 = main.db.prepareStatement("SELECT Correct,OptionID FROM options WHERE Option = ? AND QuestionID = ?;");
+                ps1.setString(1, Option);
+                ps1.setInt(2,QuestionID);
                 ResultSet validityOfOption = ps1.executeQuery();
                 JSONObject response = new JSONObject();
-
                 // Return whether correct or false
-                boolean returnedResult = false;
-                if (validityOfOption.next() == true) {
-                        response.put("QuizResult", validityOfOption.getBoolean(1));
-                        returnedResult = true;
+                PreparedStatement ps2 = main.db.prepareStatement("INSERT INTO quizguesses (OptionID, UserID) VALUES (?,?)");
+                ps2.setString(1, String.valueOf(validityOfOption.getInt(2)));
+                ps2.setString(2,UserID);
+                ps2.executeUpdate(); // insert needs to use the executeUpdate instruction
+                System.out.println("Ohhh this got triggered");
+                if (validityOfOption.next()) {
+                    response.put("QuizResult", validityOfOption.getInt(1));
+                    response.put("Option", validityOfOption.getInt(2));
+                    response.put("Answer","Correct");
+                    return response.toString();
+                }else{
+                    return "{\"Error\": \"You gave the incorrect answer\"}";
                 }
 
-                // stop running API method if the OptionID is not in the database
-                if (!returnedResult) {
-                    response.put("Error", "Invalid quiz option");
-                    return response.toString();
-                }
+                // stop running API method if the option is not in the database
+                // there may be the problem that if two options are the same
+                // but are associated with different questions
+                // the API method may only read the first to come up
+
 
                 // update the quizguesses table
-                PreparedStatement ps2 = main.db.prepareStatement("INSERT INTO quizguesses (OptionID, UserID) VALUES (?, ?)");
-                ps2.setInt(1, OptionID);
-                ps2.setString(2, UserID);
-                ResultSet updateQuizGuessesTable = ps2.executeQuery();
 
-                if (updateQuizGuessesTable.next() == true) {
-                    System.out.println("Ohhh this got triggered");
-                }
-
-
-                return response.toString();
             } catch (Exception exception) {
                 System.out.println("Database error: " + exception.getMessage());
                 return "{\"Error\": \"Unable to mark quiz, please see server console for more info.\"}";
