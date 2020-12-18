@@ -76,6 +76,7 @@ public class quiz {
     public String Mark(@FormDataParam("OptionID") int OptionID, @FormDataParam("UserID") int UserID) {
         System.out.println("Invoked Quiz.Mark() with OptionID " + OptionID + " and UserID " + UserID);
         try {
+            // check the result of the quiz
             PreparedStatement ps1 = main.db.prepareStatement("SELECT Correct FROM options WHERE OptionID = ?;");
             ps1.setInt(1, OptionID);
             ResultSet validityOfOption = ps1.executeQuery();
