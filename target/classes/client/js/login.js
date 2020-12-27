@@ -1,5 +1,8 @@
 // login function to allow user to access the
 //        !!! LOGGING IN ONLY EVER WORKS ON THE SECOND ATTEMPT !!!          ///
+//            IF SUCCESS=FALSE DISPLAY P TAG ON THE ACTUAL
+//            PAGE AND DON'T REDIRECT TO USERS
+
 function logInUser() {
     console.log("Invoked logInUser()");
     //debugger;
@@ -15,19 +18,17 @@ function logInUser() {
             alert(JSON.stringify(response));
         } else {
             // URL replaces the current page
-            console.log("Reached here");
             Cookies.set("SessionToken", response.SessionToken);
             Cookies.set("Username", response.Username);
             Cookies.set("UserID", response.UserID);
             window.open("user.html", "_self");
-            getImageRecommended();
         }
     });
 }
 
 // logout function to remove user session token from database
 function logout() {
-    debugger;
+    //debugger;
     console.log("Invoked logout");
     let url = "/users/logout";
     fetch(url, {method: "POST"

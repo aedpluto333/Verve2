@@ -8,6 +8,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Random;
 
 
 @Path("lessons/")
@@ -98,23 +99,31 @@ public class lessons {
         public String Recommend() {
         System.out.println("Invoked Lessons.Recommend()");
         try {
-            // these should be three separate sql statements - evaluation - split for readability
-
-            // find the number of courses in the database
-            // and randomly select a course ID
+            // these should be separate sql statements - evaluation - split for readability
 
             // find the number of lessons in the course
             // and randomly select a lesson ID
 
-            // return the lesson title, lessonID and the associated image
-            PreparedStatement ps = main.db.prepareStatement("SELECT LessonID, Name, Picture FROM WHERE LessonID = FLOOR(RAND()*COUNT(SELECT LessonID FROM Lessons WHERE CourseID = FLOOR(RAND()*COUNT(SELECT CourseID FROM Courses))))");
-            ResultSet results3 = ps.executeQuery();
+            PreparedStatement ps1 = main.db.prepareStatement("SELECT COUNT(*) FROM lessons");
+            ResultSet lessonCount = ps1.executeQuery();
             JSONObject response = new JSONObject();
-            String labels[] = {"LessonID", "Name", "Picture"};
-            int count = 0;
-            if (results3.next() == true) {
-                response.put(labels[count], results3.getString(1));
-                count++;
+
+            int noLessons = 0;
+            if (lessonCount.next() == true) {
+                noLessons = lessonCount.getInt(1);
+            }
+
+            Random rand = new Random();
+            int randomLessonID = rand.nextInt(noLessons);
+
+            // return the lesson title, lessonID and the associated image
+            PreparedStatement ps2 = main.db.prepareStatement("SELECT LessonID, Name, Picture FROM lessons WHERE LessonID = ?");
+            ps2.setInt(1, randomLessonID);
+            ResultSet results = ps2.executeQuery();
+            if (results.next() == true) {
+                response.put("LessonID", results.getInt(0));
+                response.put("LessonName", results.getString(1));
+                response.put("Picture", results.getString(2));
             }
 
             return response.toString();
