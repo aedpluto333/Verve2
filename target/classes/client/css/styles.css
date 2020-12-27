@@ -52,7 +52,14 @@ h1,h2,p,li,label,button {
 .specialButton {
     background: #02b302;
     color: white;
+    margin-left: 7.8125vw;
+    margin-bottom: 1.5em;
 }
+/*
+.buttonAlignment {
+    margin-left: 7.8125vw;
+    margin-bottom: 1.5em;
+}*/
 
 /* styles for the user homepage */
 
