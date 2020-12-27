@@ -27,7 +27,7 @@ function formatUsersList(myJSONArray){
 function getImageRecommended() {
     console.log("Invoked getImageRecommendation()");
     //debugger;
-    const url = "/users/recommend/";                       // API method on webserver
+    const url = "/lessons/recommend/";                       // API method on webserver
     fetch(url, {
         method: "GET",
     }).then(response => {

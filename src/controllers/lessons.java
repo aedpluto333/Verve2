@@ -99,8 +99,6 @@ public class lessons {
         public String Recommend() {
         System.out.println("Invoked Lessons.Recommend()");
         try {
-            // these should be separate sql statements - evaluation - split for readability
-
             // find the number of lessons in the course
             // and randomly select a lesson ID
 
@@ -121,9 +119,9 @@ public class lessons {
             ps2.setInt(1, randomLessonID);
             ResultSet results = ps2.executeQuery();
             if (results.next() == true) {
-                response.put("LessonID", results.getInt(0));
-                response.put("LessonName", results.getString(1));
-                response.put("Picture", results.getString(2));
+                response.put("LessonID", results.getInt(1));
+                response.put("LessonName", results.getString(2));
+                response.put("Picture", results.getString(3));
             }
 
             return response.toString();
