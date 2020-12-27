@@ -18,6 +18,7 @@ function logInUser() {
             console.log("Reached here");
             Cookies.set("SessionToken", response.SessionToken);
             Cookies.set("Username", response.Username);
+            Cookies.set("UserID", response.UserID);
             window.open("user.html", "_self");
             getImageRecommended();
         }

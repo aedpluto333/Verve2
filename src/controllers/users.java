@@ -128,7 +128,7 @@ public class users {
         try {
             // Checks for a password under the given username
             // Could throw an error is that user does not exist
-            PreparedStatement ps = main.db.prepareStatement("SELECT Password FROM users WHERE Username = ?");
+            PreparedStatement ps = main.db.prepareStatement("SELECT Password, UserID FROM users WHERE Username = ?");
             ps.setString(1, Username);
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
@@ -151,6 +151,7 @@ public class users {
                     ps2.executeUpdate();
 
                     // output the result
+                    response.put("UserID", results.getString(2);
                     response.put("Username", Username);
                     response.put("SessionToken", token);
 
