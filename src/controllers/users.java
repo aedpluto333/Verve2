@@ -151,7 +151,7 @@ public class users {
                     ps2.executeUpdate();
 
                     // output the result
-                    response.put("UserID", results.getInt(2);
+                    response.put("UserID", results.getInt(2));
                     response.put("Username", Username);
                     response.put("SessionToken", token);
 
