@@ -134,11 +134,8 @@ public class users {
             JSONObject response = new JSONObject();
 
             if (results.next() == true) {
-                System.out.println("Got to the if statement");
                 // Hash the password (guess) the user entered via the login page
                 String sha2Hex = generateHash(Password);
-                System.out.println("Password in DB: "+results.getString(1));
-                System.out.println("Password entered: "+sha2Hex);
 
                 // See if password guess equals the password
                 if (results.getString(1).equals(sha2Hex)) {
@@ -157,6 +154,8 @@ public class users {
                     // output the result
                     response.put("Username", Username);
                     response.put("SessionToken", token);
+
+                    successful = true;
                 }
             }
 
