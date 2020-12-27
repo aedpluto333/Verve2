@@ -18,6 +18,7 @@ function logInUser() {
             console.log("Reached here");
             Cookies.set("SessionToken", response.SessionToken);
             Cookies.set("Username", response.Username);
+            Cookies.set("UserID", response.UserID);
             window.open("user.html", "_self");
             getImageRecommended();
         }
@@ -31,13 +32,14 @@ function logout() {
     let url = "/users/logout";
     fetch(url, {method: "POST"
     }).then(response => {
-        return response.json();                 //now return that promise to JSON
+        return response.json();                 // now return that promise to JSON
     }).then(response => {
         if (response.hasOwnProperty("Error")) {
             alert(JSON.stringify(response));        // if it does, convert JSON object to string and alert
         } else {
             Cookies.remove("SessionToken", response.SessionToken);    //UserName and Token are removed
             Cookies.remove("Username", response.Username);
+            Cookies.remove("UserID", response.UserID);
             window.open("login.html", "_self");       //open index.html in same tab
         }
     });
