@@ -27,16 +27,19 @@ function formatUsersList(myJSONArray){
 function getImageRecommended() {
     console.log("Invoked getImageRecommendation()");
     //debugger;
-    const url = "/lessons/recommend/";                       // API method on webserver
+    const url = "/lessons/recommend/";
     fetch(url, {
         method: "GET",
     }).then(response => {
-        return response.json();                            //return response to JSON
+        //return response to JSON
+        return response.json();
     }).then(response => {
         if (response.hasOwnProperty("Error")) {         //checks if response from server has an "Error"
             alert(JSON.stringify(response));               // if it does, convert JSON object to string and alert
         } else {
-            document.getElementById("recommendedImage").src = response;
+            document.getElementById("recommendedImage").src = response.Picture;
+            // accessibility feature
+            document.getElementById("recommendedImage").alt = response.LessonName;
         }
     });
 }
