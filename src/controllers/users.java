@@ -170,7 +170,7 @@ public class users {
     @Produces(MediaType.APPLICATION_JSON)
     // API to list the progress in each topic made by the user
     // Take session token as user input
-    public String UserListProgress(@PathParam("SessionToken") String SessionToken) {
+    public String UserListProgress(@CookieParam("SessionToken") String SessionToken) {
         System.out.println("Invoked Users.UserListProgress() with SessionToken " + SessionToken);
         try {
             // look at the quizguesses link table and count the number of lessons completed for each course
