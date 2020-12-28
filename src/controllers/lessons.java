@@ -23,7 +23,7 @@ public class lessons {
         System.out.println("Invoked Lessons.ListLessons()");
         try {
 
-            PreparedStatement ps = main.db.prepareStatement("SELECT LessonID, Name FROM lessons");
+            PreparedStatement ps = main.db.prepareStatement("SELECT lessons.LessonID, courses.CourseName, lessons.Name FROM lessons JOIN courses ON lessons.CourseID = courses.CourseID");
             ResultSet results = ps.executeQuery();
             JSONObject response = new JSONObject();
             JSONArray lessons = new JSONArray();
@@ -33,6 +33,7 @@ public class lessons {
                 JSONArray currentLesson = new JSONArray();
                 currentLesson.add(results.getString(1));
                 currentLesson.add(results.getString(2));
+                currentLesson.add(results.getString(3));
                 lessons.add(currentLesson);
             }
 

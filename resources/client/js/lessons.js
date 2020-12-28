@@ -11,7 +11,6 @@ function getLessonsList() {
         if (response.hasOwnProperty("Error")) { //checks if response from the web server has an "Error"
             alert(JSON.stringify(response));    // if it does, convert JSON object to string and alert (pop up window)
         } else {
-            alert(JSON.stringify(response));
             formatLessonsList(response.Results);          //this function will create an HTML table of the data (as per previous lesson)
         }
     });
@@ -20,8 +19,9 @@ function getLessonsList() {
 function formatLessonsList(myJSONArray){
     let dataHTML = "";
     for (let item of myJSONArray) {
+        // inject div into the HTML page
         dataHTML += "<div class=\"lessonInfoBlock\">\n" +
-            "        <p>"+item[0]+":"+item[1]+"</p>\n" +
+            "        <p>"+item[1]+": "+item[2]+"</p>\n" +
             "        <p><a href=\"index.html\">Start lesson >></a></p>\n" +
             "    </div>";
     }
