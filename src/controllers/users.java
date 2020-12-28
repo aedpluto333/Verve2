@@ -129,12 +129,11 @@ public class users {
             // look at the quizguesses link table and count the number of lessons completed for each course
             // gets the userid from the session token and finds the lessonscompleted from which quizzes have been done
             // join course titles
-            PreparedStatement ps1 = main.db.prepareStatement("COUNT(SELECT OptionID FROM quizguesses" +
-                    "WHERE UserID = (SELECT UserID FROM users WHERE SessionToken = ?))" +
-                    "AND ");
+            PreparedStatement ps1 = main.db.prepareStatement("SELECT COUNT(*) FROM quizguesses WHERE UserID = ? AND OptionID IN (SELECT OptionID FROM options WHERE QuestionID IN (SELECT QuestionID FROM lessons WHERE CourseID=?));");
+
             // count the number of lessons in each course
-            PreparedStatement ps2 = main.db.prepareStatement("COUNT(SELECT Name FROM lessons WHERE CourseID=)" +
-                    "AND ");
+            PreparedStatement ps2 = main.db.prepareStatement("SELECT courses.CourseName, lessons.Name FROM courses JOIN lessons ON courses.CourseID = lessons.CourseID;");
+
             // calculate the percentage of the way through each course
             // return the course name with the percentage
             ps1.setString(1, SessionToken);
