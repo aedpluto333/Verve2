@@ -1,6 +1,6 @@
 function getQuestion(){
-    console.log("invoked getQuestion();");
-    let url = "/quiz/get/0";
+    console.log("Invoked getQuestion();");
+    let url = "/quiz/get/"+document.cookie.split("; ")[3].split("=")[1];
     fetch(url, {
         method: "GET",
     }).then(response => {

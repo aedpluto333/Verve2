@@ -7,8 +7,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.14/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.js"></script>
     <script src="js\login.js"></script>
+    <script src="js\lessons.js"></script>
     <script src="js\questions.js"></script>
-    <script>getQuestion();</script>
 </head>
 
 <body>
@@ -65,7 +65,7 @@
 <div class="mainPanel">
     <br>
     <h2 class="mainContent">Extra info</h2>
-    <p class="mainContent">This relates to many things you see in real life.</p>
+    <p class="mainContent" id="extraInfo">This relates to many things you see in real life.</p>
     <br>
 </div>
 
@@ -83,8 +83,9 @@
     </div>
 </div>
 
-<script src="js\double-slit-experiment.js">
-</script>
+<script src="js\double-slit-experiment.js" id="simulation"></script>
+<script>getLesson();</script>
+<script>getQuestion();</script>
 <!--
 <input type="text" style="position:absolute;left:100px;top:600px;width:50px" id="input1"></input>
 -->

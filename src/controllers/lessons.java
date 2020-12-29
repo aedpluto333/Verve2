@@ -54,7 +54,7 @@ public class lessons {
     // converting it to an ordinary GetLesson method
 
     @GET
-    @Path("getlesson/{LessonID}")
+    @Path("get/{LessonID}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     // This API method lists all of the data required to display a lesson
