@@ -1,6 +1,6 @@
 function getQuestion(){
-    console.log("invoked getQuestion()");
-    let url = "/quiz/getQuestion";
+    console.log("invoked getQuestion();");
+    let url = "/quiz/get/0";
     fetch(url, {
         method: "GET",
     }).then(response => {
@@ -9,9 +9,11 @@ function getQuestion(){
         if (response.hasOwnProperty("Error")) {
             alert(JSON.stringify(response));        // if it does, convert JSON object to string and alert
         } else {
-            //Cookies.set("Token", response.Token);
-            //Cookies.set("Username", response.Username);
-            //window.open("game.html", "_self");       //open index.html in same tab
+            document.getElementById("quizQuestion").innerHTML = response.Question;
+            for (i=1; i<=4; i++) {
+                document.getElementById("option"+i).value = response.Options[i-1];
+                document.getElementsByTagName("label")[i-1].innerHTML = response.Options[i-1];
+            }
         }
     });
 }
