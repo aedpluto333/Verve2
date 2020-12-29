@@ -7,9 +7,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.14/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.js"></script>
     <script src="js\login.js"></script>
+    <script src="js\questions.js"></script>
+    <script>getQuestion();</script>
 </head>
 
-<body onload="getQuestion();">
+<body>
 
 <!-- banner -->
 <!-- Next and logout buttons require further actions -->
@@ -39,21 +41,20 @@
 <div class="mainPanel">
     <br>
     <h2 class="mainContent">Quiz</h1>
-        <p class="mainContent"> What is 2+2?</p>
+        <p class="mainContent" id="quizQuestion"> What is 2+2?</p>
 
-        <!-- ******************** need to modify male/female 'for's in this form ******************** -->
         <form class="mainContent">
             <input type="radio" id="option1" name="quiz" value="1">
-            <label for="male">1</label><br>
+            <label for="option1">1</label><br>
 
             <input type="radio" id="option2" name="quiz" value="2">
-            <label for="female">2</label><br>
+            <label for="option2">2</label><br>
 
             <input type="radio" id="option3" name="quiz" value="3">
-            <label for="male">3</label><br>
+            <label for="option3">3</label><br>
 
             <input type="radio" id="option4" name="quiz" value="4">
-            <label for="female">4</label><br><br>
+            <label for="option4">4</label><br><br>
 
 
         </form>
