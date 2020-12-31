@@ -20,7 +20,7 @@
         <button type="button" onclick='window.location.href="user.html"'>Profile</button>
         <button type="button" onclick='window.location.href="courses.html"'>Courses</button>
         <button type="button" onclick='window.location.href="sitemap.html"'>Sitemap</button>
-        <button type="button">Next</button>
+        <button type="button" id="nextButton">Next</button>
         <button type="button" onclick='logout();' class="logoutButton">Log out</button>
     </div>
 </div>
@@ -84,7 +84,7 @@
 </div>
 
 <script src="js\double-slit-experiment.js" id="simulation"></script>
-<script>document.getElementById("simulation").src="js\\exoplanets.js";</script>
+<script>getLesson();</script>
 <script>getQuestion();</script>
 <!--
 <input type="text" style="position:absolute;left:100px;top:600px;width:50px" id="input1"></input>

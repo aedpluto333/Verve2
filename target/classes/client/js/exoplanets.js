@@ -1,6 +1,3 @@
-document.getElementById("gameTitle").innerHTML = "Discovering exoplanets";
-document.getElementById("gameDescription").innerHTML = "";
-
 function setup() {
     var canvas = createCanvas(window.innerWidth*0.46875, window.innerHeight*0.66176);
     canvas.parent('lessonPanel');
