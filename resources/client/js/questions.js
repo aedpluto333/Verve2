@@ -17,3 +17,29 @@ function getQuestion(){
         }
     });
 }
+
+function quizMark() {
+    console.log("Invoked quizMark();");
+
+    const date = document.getElementById('datepicker').value;
+    const weightInKG = document.getElementById('weightInKG').value;
+
+    // create a form containing data necessary to mark the quiz
+    var formData = new FormData();
+    formData.append('date', date);
+    formData.append('weightInKG', weightInKG);
+    var url = "/weight/add";
+
+    fetch(url, {
+        method: "POST",
+        body: formData,
+    }).then(response => {
+        return response.json()          //method returns a promise, have to return from here to get text
+    }).then(response => {
+        if (response.hasOwnProperty("Error")) {   //checks if response from server has a key "Error"
+            alert(JSON.stringify(response));        // if it does, convert JSON object to string and alert
+        } else {
+            getWeightList();
+        }
+    });
+}

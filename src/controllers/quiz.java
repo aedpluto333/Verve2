@@ -72,11 +72,38 @@ public class quiz {
     public String Mark(@FormDataParam("OptionID") int OptionID, @FormDataParam("UserID") int UserID) {
         System.out.println("Invoked Quiz.Mark() with OptionID " + OptionID + " and UserID " + UserID);
         try {
+            // check the user is in the database
+            PreparedStatement ps0_1 = main.db.prepareStatement("SELECT COUNT(*) FROM Users WHERE UserID = ?;");
+            ps0_1.setInt(1, UserID);
+            ResultSet noUsers = ps0_1.executeQuery();
+            JSONObject response = new JSONObject();
+
+            if (noUsers.next() == true) {
+                if (noUsers.getInt(1) == 0) {
+                    response.put("Error", "User is not in the database");
+                    // exit method early
+                    return response.toString();
+                }
+            }
+
+            // check the user hasn't previously tried to answer this question
+            PreparedStatement ps0_2 = main.db.prepareStatement("SELECT COUNT(*) FROM quizguesses WHERE UserID=? AND OptionID IN (SELECT OptionID FROM options WHERE QuestionID=(SELECT QuestionID FROM options WHERE OptionID=?));");
+            ps0_2.setInt(1, UserID);
+            ps0_2.setInt(2, OptionID);
+            ResultSet optionCount = ps0_2.executeQuery();
+
+            if (optionCount.next() == true) {
+                if (optionCount.getInt(1) != 0) {
+                    response.put("Error", "You've already completed this question.");
+                    // exit method early
+                    return response.toString();
+                }
+            }
+
             // check the result of the quiz
             PreparedStatement ps1 = main.db.prepareStatement("SELECT Correct FROM options WHERE OptionID = ?;");
             ps1.setInt(1, OptionID);
             ResultSet validityOfOption = ps1.executeQuery();
-            JSONObject response = new JSONObject();
 
             // Return whether correct or false
             boolean returnedResult = false;
@@ -100,6 +127,9 @@ public class quiz {
             return response.toString();
         } catch (Exception exception) {
             System.out.println("Database error: " + exception.getMessage());
+            if (exception.getMessage().contains("UNIQUE constraint failed")) {
+                return "{\"Error\": \"You've already completed this question.\"}";
+            }
             return "{\"Error\": \"Unable to mark quiz, please see server console for more info.\"}";
         }
     }
