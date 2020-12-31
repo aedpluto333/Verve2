@@ -31,7 +31,7 @@ function formatLessonsList(myJSONArray){
 function getLesson() {
     //debugger;
     console.log("Invoked getLesson();");
-    const url = "/lessons/get/"+document.cookie.split("; ")[3].split("=")[1];
+    const url = "/lessons/get/"+document.cookie.split("LessonID=")[1].split(";")[0];
     fetch(url, {
         method: "GET",
     }).then(response => {

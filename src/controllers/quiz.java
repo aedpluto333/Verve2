@@ -41,7 +41,7 @@ public class quiz {
             }
 
             // Get the options from the quiz table
-            PreparedStatement ps2 = main.db.prepareStatement("SELECT Option FROM options WHERE QuestionID = (SELECT QuestionID FROM lessons WHERE LessonID = ?)");
+            PreparedStatement ps2 = main.db.prepareStatement("SELECT OptionID, Option FROM options WHERE QuestionID = (SELECT QuestionID FROM lessons WHERE LessonID = ?)");
             ps2.setInt(1, LessonID);
             ResultSet results2 = ps2.executeQuery();
 
@@ -50,8 +50,12 @@ public class quiz {
 
             // expect four options
             while (results2.next() == true) {
-                // Add the option to the options array
-                options.add(results2.getString(1));
+                // create an array for each option [OptionID, Option]
+                JSONArray currentOption = new JSONArray();
+                currentOption.add(results2.getString(1));
+                currentOption.add(results2.getString(2));
+                // Add the array for this specific option to the options array
+                options.add(currentOption);
             }
 
             response.put("Options", options);
