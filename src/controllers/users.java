@@ -154,7 +154,6 @@ public class users {
             ResultSet coursesResults = ps2.executeQuery();
 
             // calculate the percentage of the way through each course
-            // return the course name with the percentage
             JSONArray progressData = new JSONArray();
             while (coursesResults.next() == true && progressResults.next() == true) {
                 JSONArray tempArray = new JSONArray();
