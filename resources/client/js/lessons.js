@@ -45,7 +45,12 @@ function getLesson() {
         } else {
             // set elements on page to the data returned
             document.getElementById("gameTitle").innerHTML = response.LessonData[1]; // page title
-            document.getElementById("simulation").src = response.LessonData[3]; // simulation
+            //document.getElementById("simulation").innerHTML = "<script src=\""+response.LessonData[3]+"\"></script>"; // simulation
+            var s = document.createElement("script");
+            s.type = "text/javascript";
+            s.src = response.LessonData[3];
+            s.innerHTML = null;
+            document.getElementById("output").appendChild(s)
             document.getElementById("gameDescription").innerHTML = response.LessonData[5]; // description
             document.getElementById("extraInfo").innerHTML = response.LessonData[6]; // extra info
             document.getElementById("nextButton").onclick = "Cookies.set('LessonID', "+(response.LessonData[2]+1)+"); window.open(\"index.html\", \"_self\");"; // next button
