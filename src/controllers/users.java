@@ -1,6 +1,7 @@
 package controllers;
 
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.main;
 
@@ -118,34 +119,51 @@ public class users {
     }
 
     @GET
-    @Path("listprogress/{SessionToken}")
+    @Path("listprogress/{UserID}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     // API to list the progress in each topic made by the user
     // Take session token as user input
-    public String UserListProgress(@CookieParam("SessionToken") String SessionToken) {
-        System.out.println("Invoked Users.UserListProgress() with SessionToken " + SessionToken);
+    public String UserListProgress(@PathParam("UserID") Integer UserID) {
+        System.out.println("Invoked Users.UserListProgress() with UserID " + UserID);
         try {
+            // check the user is in the database
+            PreparedStatement ps0 = main.db.prepareStatement("SELECT COUNT(*) FROM Users WHERE UserID = ?;");
+            ps0.setInt(1, UserID);
+            ResultSet noUsers = ps0.executeQuery();
+            JSONObject response = new JSONObject();
+
+            if (noUsers.next() == true) {
+                if (noUsers.getInt(1) == 0) {
+                    response.put("Error", "User is not in the database");
+                    // exit method early
+                    return response.toString();
+                }
+            }
+
             // look at the quizguesses link table and count the number of lessons completed for each course
-            // gets the userid from the session token and finds the lessonscompleted from which quizzes have been done
-            // join course titles
-            PreparedStatement ps1 = main.db.prepareStatement("SELECT COUNT(*) FROM quizguesses WHERE UserID = ? AND OptionID IN (SELECT OptionID FROM options WHERE QuestionID IN (SELECT QuestionID FROM lessons WHERE CourseID=?));");
+            // gets the userid from the cookie param
+            // join to course titles
+            PreparedStatement ps1 = main.db.prepareStatement("SELECT courses.CourseName, COUNT(quizguesses.OptionID) FROM quizguesses JOIN courses ON (SELECT lessons.CourseID FROM lessons WHERE lessons.QuestionID=(SELECT options.QuestionID FROM options WHERE options.OptionID=quizguesses.OptionID))=courses.CourseID WHERE quizguesses.UserID=? GROUP BY courses.CourseID;");
+            ps1.setInt(1, UserID);
+            ResultSet progressResults = ps1.executeQuery();
 
             // count the number of lessons in each course
-            PreparedStatement ps2 = main.db.prepareStatement("SELECT courses.CourseName, lessons.Name FROM courses JOIN lessons ON courses.CourseID = lessons.CourseID;");
+            // join to course titles
+            PreparedStatement ps2 = main.db.prepareStatement("SELECT courses.CourseName, COUNT(*) FROM lessons JOIN courses ON courses.CourseID = lessons.CourseID GROUP BY courses.CourseID;");
+            ResultSet coursesResults = ps2.executeQuery();
 
             // calculate the percentage of the way through each course
             // return the course name with the percentage
-            ps1.setString(1, SessionToken);
-            ResultSet results = ps1.executeQuery();
-            JSONObject response = new JSONObject();
-            if (results.next() == true) {
-                if (results.getString(1) != "") {
-                    response.put("SessionToken", true);
-                } else {
-                    response.put("SessionToken", false);
-                }
+            JSONArray progressData = new JSONArray();
+            while (coursesResults.next() == true && progressResults.next() == true) {
+                JSONArray tempArray = new JSONArray();
+                tempArray.add(coursesResults.getString(1));
+                tempArray.add(progressResults.getInt(2));
+                tempArray.add(coursesResults.getInt(2));
+                progressData.add(tempArray);
             }
+            response.put("Results", progressData);
             return response.toString();
         } catch (Exception exception) {
             System.out.println("Database error: " + exception.getMessage());
