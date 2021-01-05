@@ -14,8 +14,17 @@ function getImageRecommended() {
             document.getElementById("recommendedImage").src = response.Picture;
             // accessibility feature
             document.getElementById("recommendedImage").alt = response.LessonName;
+            // when clicked redirect to the correct lesson
+            console.log(response.LessonID);
+            document.getElementById("recommendedImage").onclick = function(){getLessonFromImage(response.LessonID)};
         }
     });
+}
+
+function getLessonFromImage(LID) {
+    console.log("Invoked gerLessonFromImage();");
+    Cookies.set("LessonID", LID);
+    window.open("index.html", "_self");
 }
 
 "use strict";

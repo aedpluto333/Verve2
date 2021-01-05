@@ -16,6 +16,8 @@ function logInUser() {
     }).then(response => {
         if (response.hasOwnProperty("Error")) {
             alert(JSON.stringify(response));
+        } else if (response.Success == false) {
+            document.getElementById("errorMessage").innerText = "Failed to log in";
         } else {
             // URL replaces the current page
             Cookies.set("SessionToken", response.SessionToken);
