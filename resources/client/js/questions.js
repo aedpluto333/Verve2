@@ -7,7 +7,7 @@ function getQuestion(){
         return response.json();                 //now return that promise to JSON
     }).then(response => {
         if (response.hasOwnProperty("Error")) {
-            alert(JSON.stringify(response));        // if it does, convert JSON object to string and alert
+            console.log(response.Error);        // if it does, convert JSON object to string and console output
         } else {
             document.getElementById("quizQuestion").innerHTML = response.Question;
             for (i=1; i<=4; i++) {
@@ -52,7 +52,7 @@ function quizMark() {
         return response.json()          //method returns a promise, have to return from here to get text
     }).then(response => {
         if (response.hasOwnProperty("Error")) {   //checks if response from server has a key "Error"
-            alert(JSON.stringify(response));        // if it does, convert JSON object to string and alert
+            alert(response.Error);        // if it does, convert JSON object to string and alert
         } else {
             document.getElementById("quizResult").innerHTML = response.QuizResult;
         }

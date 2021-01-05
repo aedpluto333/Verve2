@@ -35,27 +35,37 @@ function getLesson() {
     fetch(url, {
         method: "GET",
     }).then(response => {
-        return response.json();                          //return response as JSON
+        //return response as JSON
+        return response.json();
     }).then(response => {
-        if (response.hasOwnProperty("Error")) {       //checks if response from the web server has an "Error"
-            alert(JSON.stringify(response));             //if it does, convert JSON object to string and alert (pop up window)
+        //checks if response from the web server has an "Error"
+        //if it does, convert JSON object to string and alert (pop up window)
+        if (response.hasOwnProperty("Error")) {
+            // if the lesson number is invalid redirect to the courses page
             if (response.Error == "Not a valid lesson number") {
+                // set the lesson id cookie to be the previous lesson id
+                Cookies.set("LessonID", parseInt(document.cookie.split("LessonID=")[1].split(";")[0])-1);
                 window.open("courses.html", "_self");
+            } else {
+                // stop page reload after the first alert
+                alert(response.Error);
+                return false;
             }
         } else {
             // set elements on page to the data returned
             document.getElementById("gameTitle").innerHTML = response.LessonData[1]; // page title
             //document.getElementById("simulation").innerHTML = "<script src=\""+response.LessonData[3]+"\"></script>"; // simulation
-            var s = document.createElement("script");
-            s.type = "text/javascript";
-            s.src = response.LessonData[3];
-            s.innerHTML = null;
-            document.getElementById("output").appendChild(s)
             document.getElementById("gameDescription").innerHTML = response.LessonData[5]; // description
             document.getElementById("extraInfo").innerHTML = response.LessonData[6]; // extra info
-            document.getElementById("nextButton").onclick = "Cookies.set('LessonID', "+(response.LessonData[2]+1)+"); window.open(\"index.html\", \"_self\");"; // next button
+            document.getElementById("nextButton").onclick = function(){nextButtonPress(parseInt(response.LessonData[0])+1)}; // next button, use column 2 if creating new API method
         }
     });
+}
+
+function nextButtonPress(LID) {
+    console.log("Invoked nextButtonPress();");
+    Cookies.set('LessonID', LID);
+    window.open("index.html", "_self");
 }
 
 function getNextLesson() {
