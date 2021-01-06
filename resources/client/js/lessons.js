@@ -68,7 +68,7 @@ function getLesson() {
 
 async function loadLevel(URL){
     console.log(URL);
-    let {setup, draw}= await import(URL);
+    let {setup, draw} = await import(URL);
     setup();
     draw();
 }
