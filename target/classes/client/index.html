@@ -11,6 +11,7 @@
     <script src="js\questions.js"></script>
     <script>getLesson();</script>
     <script>getQuestion();</script>
+    <script>setup();draw();</script>
 </head>
 
 <body>
@@ -36,12 +37,10 @@
     <div class="mainContent" id="lessonPanel"></div>
     <br>
     <p class="mainContent" id="gameDescription">Hello world!</p>
-    <br>
 </div>
 
 <!-- quiz -->
 <div class="mainPanel">
-    <br>
     <h2 class="mainContent">Quiz</h1>
         <p class="mainContent" id="quizQuestion"> What is 2+2?</p>
 
@@ -61,7 +60,7 @@
 
         </form>
         <button class="specialButton" onclick='console.log("Submitted quiz"); quizMark();'>Submit</button>
-        <p class="mainContent" id="quizResult" style="color:red; font-weight:bold;"></p>
+        <p class="mainContent" id="quizResult" style="color:#ff0000; font-weight:bold;"></p>
 </div>
 
 <!-- relation to uni / extra topics -->

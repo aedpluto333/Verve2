@@ -77,3 +77,6 @@ function draw() {
     stroke(255);
     rect(0, height*0.9, width, 1);
 }
+
+
+export {setup, draw};

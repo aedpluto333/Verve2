@@ -54,12 +54,23 @@ function getLesson() {
         } else {
             // set elements on page to the data returned
             document.getElementById("gameTitle").innerHTML = response.LessonData[1]; // page title
-            //document.getElementById("simulation").innerHTML = "<script src=\""+response.LessonData[3]+"\"></script>"; // simulation
+            //document.getElementById("level").async = true;
+            //document.getElementById("level").src = response.LessonData[3]; // simulation
             document.getElementById("gameDescription").innerHTML = response.LessonData[5]; // description
             document.getElementById("extraInfo").innerHTML = response.LessonData[6]; // extra info
             document.getElementById("nextButton").onclick = function(){nextButtonPress(parseInt(response.LessonData[0])+1)}; // next button, use column 2 if creating new API method
+
+            loadLevel(response.LessonData[3]);
+
         }
     });
+}
+
+async function loadLevel(URL){
+    console.log(URL);
+    let {setup, draw}= await import(URL);
+    setup();
+    draw();
 }
 
 function nextButtonPress(LID) {
