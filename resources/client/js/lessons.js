@@ -59,6 +59,7 @@ function getLesson() {
             document.getElementById("gameDescription").innerHTML = response.LessonData[5]; // description
             document.getElementById("extraInfo").innerHTML = response.LessonData[6]; // extra info
             document.getElementById("nextButton").onclick = function(){nextButtonPress(parseInt(response.LessonData[0])+1)}; // next button, use column 2 if creating new API method
+            document.getElementById("lessonScript").src = response.LessonData[3];
 
             loadLevel(response.LessonData[3]);
 
