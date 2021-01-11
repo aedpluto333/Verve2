@@ -87,6 +87,7 @@ public class users {
             if (results.next() == true) {
                 // Hash the password (guess) the user entered via the login page
                 String sha2Hex = generateHash(Password);
+                System.out.println(sha2Hex);
 
                 // See if password guess equals the password
                 if (results.getString(1).equals(sha2Hex)) {
