@@ -79,4 +79,4 @@ function draw() {
 }
 
 
-export {setup, draw};
+//export {setup, draw};
