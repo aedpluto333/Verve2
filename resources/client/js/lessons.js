@@ -54,14 +54,17 @@ function getLesson() {
         } else {
             // set elements on page to the data returned
             document.getElementById("gameTitle").innerHTML = response.LessonData[1]; // page title
-            //document.getElementById("level").async = true;
-            //document.getElementById("level").src = response.LessonData[3]; // simulation
             document.getElementById("gameDescription").innerHTML = response.LessonData[5]; // description
             document.getElementById("extraInfo").innerHTML = response.LessonData[6]; // extra info
             document.getElementById("nextButton").onclick = function(){nextButtonPress(parseInt(response.LessonData[0])+1)}; // next button, use column 2 if creating new API method
             document.getElementById("lessonScript").src = response.LessonData[3];
 
-            loadLevel(response.LessonData[3]);
+            document.getElementById("lessonScript").src = response.LessonData[3]; // simulation
+
+            Cookies.set("SimulationPath", response.LessonData[3]);
+
+            //loadJS(response.LessonData[3]);
+            //loadLevel(response.LessonData[3]);
 
         }
     });
@@ -72,6 +75,15 @@ async function loadLevel(URL){
     let {setup, draw} = await import(URL);
     setup();
     draw();
+}
+
+function LoadJS(sourceFile)
+{
+    console.log("Invoked LoadJS();")
+    var head= document.getElementsByTagName('head')[0];
+    var script= document.createElement('script');
+    script.src= sourceFile;
+    head.appendChild(script);
 }
 
 function nextButtonPress(LID) {
