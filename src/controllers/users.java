@@ -144,23 +144,20 @@ public class users {
 
             // look at the quizguesses link table and count the number of lessons completed for each course
             // gets the userid from the cookie param
-            // join to course titles
-            PreparedStatement ps1 = main.db.prepareStatement("SELECT courses.CourseName, COUNT(quizguesses.OptionID) FROM quizguesses JOIN courses ON (SELECT lessons.CourseID FROM lessons WHERE lessons.QuestionID=(SELECT options.QuestionID FROM options WHERE options.OptionID=quizguesses.OptionID))=courses.CourseID WHERE quizguesses.UserID=? GROUP BY courses.CourseID;");
+            // join to course titles ans lessons in each course
+            PreparedStatement ps1 = main.db.prepareStatement("SELECT LessonsCompleted.Course, LessonsCompleted.a, LessonsInCourse.b\n" +
+                    "FROM (SELECT courses.CourseName AS Course, COUNT(quizguesses.OptionID) AS a FROM quizguesses JOIN courses ON (SELECT lessons.CourseID FROM lessons WHERE lessons.QuestionID=(SELECT options.QuestionID FROM options WHERE options.OptionID=quizguesses.OptionID))=courses.CourseID WHERE quizguesses.UserID=? GROUP BY courses.CourseID) AS LessonsCompleted, (SELECT courses.CourseName As Course, COUNT(*) AS b FROM lessons JOIN courses ON courses.CourseID = lessons.CourseID GROUP BY courses.CourseID) AS LessonsInCourse\n" +
+                    "WHERE LessonsCompleted.Course = LessonsInCourse.Course;");
             ps1.setInt(1, UserID);
             ResultSet progressResults = ps1.executeQuery();
 
-            // count the number of lessons in each course
-            // join to course titles
-            PreparedStatement ps2 = main.db.prepareStatement("SELECT courses.CourseName, COUNT(*) FROM lessons JOIN courses ON courses.CourseID = lessons.CourseID GROUP BY courses.CourseID;");
-            ResultSet coursesResults = ps2.executeQuery();
-
             // calculate the percentage of the way through each course
             JSONArray progressData = new JSONArray();
-            while (coursesResults.next() == true && progressResults.next() == true) {
+            while (progressResults.next() == true) {
                 JSONArray tempArray = new JSONArray();
-                tempArray.add(coursesResults.getString(1));
-                tempArray.add(progressResults.getInt(2));
-                tempArray.add(coursesResults.getInt(2));
+                tempArray.add(progressResults.getString(1));;
+                tempArray.add(progressResults.getInt(2));;
+                tempArray.add(progressResults.getInt(3));;
                 progressData.add(tempArray);
             }
             response.put("Results", progressData);
